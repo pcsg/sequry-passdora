@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+. scripts/system.sh
+
 APT_UPDATE_COMPLETE_FILE="/etc/passdora_apt_complete"
 
 
@@ -11,11 +13,7 @@ function apt_Echo() {
 
 # Notice: 0 means success/true in bash
 function apt_IsUpdated() {
-    if [ -f "$APT_UPDATE_COMPLETE_FILE" ]; then
-        return 0
-    fi
-    
-    return 1
+    test -f "$APT_UPDATE_COMPLETE_FILE"
 }
 
 
@@ -55,10 +53,8 @@ function apt_AutoRemove() {
 
 
 
-function apt_ExecuteStep() {
-    apt_Echo "Executing apt step..."
-    
-    if ((!apt_IsUpdated)); then
+function apt_ExecuteStep() {   
+    if ! apt_IsUpdated; then
         apt_Echo "Updating package list..."
         apt_Update
        
@@ -70,11 +66,14 @@ function apt_ExecuteStep() {
        
         apt_Echo "Installing dependencies..."
         apt_InstallPackages
-       
-        apt_Echo "Storing apt complete state..."
-        apt_WriteUpdateCompleteFile
-       
+                      
         apt_Echo "Cleaning up..."
         apt_AutoRemove
+        
+        apt_Echo "Storing apt complete state..."
+        apt_WriteUpdateCompleteFile
+        
+        apt_Echo "Rebooting..."
+        system_Reboot
     fi
 }

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-. scripts/test.sh
 . scripts/apt.sh
+#. scripts/mysql.sh
 
 apt_ExecuteStep
+#mysql_ExecuteStep
