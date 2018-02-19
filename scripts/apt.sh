@@ -36,7 +36,7 @@ function apt_FullUpgrade() {
 
 
 function apt_InstallPackages() {
-    sudo apt install nginx mysql-server php-fpm php-curl php-dom php-mbstring php-xml php-zip php-imagick php-gd php-mysql php-bcmath php-dev libsodium-dev php-libsodium -y
+    sudo apt install ssl-cert nginx mysql-server php-fpm php-curl php-dom php-mbstring php-xml php-zip php-imagick php-gd php-mysql php-bcmath php-dev libsodium-dev php-libsodium -y
 }
 
 
