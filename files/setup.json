@@ -1,0 +1,35 @@
+{
+  "step": 32,
+  "data": {
+    "lang": "de",
+    "version": "dev-master",
+    "template": "template-businesspro",
+    "database": {
+      "create_new": false,
+      "driver": "mysql",
+      "host": "localhost",
+      "user": "quiqqer",
+      "pw": "quiqqer",
+      "name": "quiqqer",
+      "prefix": "",
+      "port": "3306"
+    },
+    "user": {
+      "name": "admin",
+      "pw": "admin"
+    },
+    "paths": {
+      "host": "http:\/\/passdora.local",
+      "httpshost": "https:\/\/passdora.local",
+      "cms_dir": "\/var\/www\/html\/",
+      "var_dir": "\/var\/www\/html\/var\/",
+      "usr_dir": "\/var\/www\/html\/usr\/",
+      "opt_dir": "\/var\/www\/html\/packages\/",
+      "url_dir": "\/",
+      "url_lib_dir": "\/lib\/",
+      "url_bin_dir": "\/bin\/"
+    },
+    "preset": "default"
+  },
+  "stepsum": 63
+}

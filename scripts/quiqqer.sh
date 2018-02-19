@@ -1,42 +1,78 @@
 #!/usr/bin/env bash
 
-# Import vagrant-shell-scripts
-#SCRIPT_DIR="$(dirname "$0")"
-#"$SCRIPT_DIR/vagrant-shell-scripts/ubuntu.sh"
+function quiqqer_Echo() {
+    echo -e "\033[0;32mquiqqer: $1\033[0m"
+}
 
-update_complete_file = "/etc/passdora_apt_complete"
 
-QUIQQER_DB_NAME = "quiqqer"
-QUIQQER_DB_USER_NAME = "quiqqer"
-QUIQQER_DB_USER_PW = "quiqqer"
+function quiqqer_DownloadSetup() {
+    sudo wget https://update.quiqqer.com/quiqqer.tgz -O /var/www/html/quiqqer.tgz
+}
 
-if [! -f "$update_complete_file"]; then
 
-    # Check if device is online
-    wget -q --spider https://update.quiqqer.com
+function quiqqer_ExtractSetup() {
+	sudo tar -xzf /var/www/html/quiqqer.tgz -C /var/www/html/
+}
 
-    if [ $? -eq 1 ]; then
-        echo "You need an internet connection to run the script."
-        exit
-    fi
 
-    sudo apt update -y
-    sudo apt full-upgrade -y
-    sudo apt install php nginx mysql php-curl php-dom php-mbstring php-xml php-zip php-imagick php-gd php-mysql php-bcmath php-dev libsodium-dev php-libsodium -y
+function quiqqer_CleanupSetup() {
+	sudo rm /var/www/html/quiqqer.tgz 
+}
+
+
+function quiqqer_SetDirPermissions() {
+    sudo chown -R www-data:www-data /var/www/html/
+}
+
+
+function quiqqer_CopyPresets() {
+    # Template Preset
+    sudo cp files/preset.json /var/www/html/templates/presets/default.json
     
-    sudo touch "$update_complete_file"
+    # Setup Preset
+    sudo mkdir -p /var/www/html/var/tmp
+    sudo cp files/setup.json /var/www/html/var/tmp/setup.json
+}
+
+
+function quiqqer_StartSetup() {
+    (
+        cd /var/www/html
+        sudo php setup.php --no-interaction
+    )
+}
+
+
+function quiqqer_GenerateNginxConfig() {
+    (
+        cd /var/www/html
+        sudo php quiqqer.php --username=admin --password=admin --tool=quiqqer:nginx
+    ) 
+}
+
+
+function quiqqer_ExecuteStep() {
+    quiqqer_Echo "Downloading setup..."
+    quiqqer_DownloadSetup
     
-    # Necessary?
-    sudo shutdown now -r
-fi
-
-
-# Todo: set MySQL root-User PW?
-
-
-# Create QUIQQER DB & User and grant him access to the DB
-sql_query = "CREATE DATABASE $QUIQQER_DB_NAME; CREATE USER '$QUIQQER_DB_USER_NAME'@'localhost' IDENTIFIED BY '$QUIQQER_DB_USER_PW'; GRANT ALL ON $QUIQQER_DB_NAME.* TO '$QUIQQER_DB_USER_NAME'@'localhost';"
-
-mysql -u "root" -e "$sql_query";
-
+    quiqqer_Echo "Extracting setup..."
+    quiqqer_ExtractSetup
+    
+    
+    quiqqer_Echo "Copying presets..."
+    quiqqer_CopyPresets
+    
+    quiqqer_Echo "Starting setup..."
+    quiqqer_StartSetup
+  
+    quiqqer_Echo "Generating nginx config..."
+    quiqqer_GenerateNginxConfig
+    
+    
+    quiqqer_Echo "Setting directory permissions..."
+    quiqqer_SetDirPermissions
+    
+    quiqqer_Echo "Cleaning up..."
+    quiqqer_CleanupSetup
+}
 

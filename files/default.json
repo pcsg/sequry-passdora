@@ -1,0 +1,25 @@
+{
+  "project": {
+    "name": "Passdora",
+    "languages": {
+      "de": true,
+      "en": true
+    }
+  },
+  "template": {
+    "name": "quiqqer\/template-businesspro",
+    "version": "dev-master",
+    "start_layout": "layout\/startPage",
+    "default_layout": "layout\/noSidebar"
+  },
+  "packages": {
+    "pcsg\/grouppasswordmanager": "dev-halite3"
+  },
+  "meta": {
+    "name": {
+      "en_EN": "Passdora",
+      "de_DE": "Passdora"
+    },
+    "icon": "fa-key"
+  }
+}
