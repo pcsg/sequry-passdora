@@ -51,6 +51,12 @@ function quiqqer_GenerateNginxConfig() {
 }
 
 
+function quiqqer_importSnakeoilCerts() {
+    sudo cp /etc/ssl/certs/ssl-cert-snakeoil.pem /var/www/html/etc/nginx/certs/cert.pem
+    sudo cp /etc/ssl/private/ssl-cert-snakeoil.key /var/www/html/etc/nginx/certs/key.pem
+}
+
+
 function quiqqer_ExecuteStep() {
     quiqqer_Echo "Downloading setup..."
     quiqqer_DownloadSetup
@@ -67,6 +73,9 @@ function quiqqer_ExecuteStep() {
   
     quiqqer_Echo "Generating nginx config..."
     quiqqer_GenerateNginxConfig
+
+    quiqqer_Echo "Importing snakeoil certificates..."
+    quiqqer_importSnakeoilCerts
     
     
     quiqqer_Echo "Setting directory permissions..."
