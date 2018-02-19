@@ -1,42 +1,37 @@
 #!/usr/bin/env bash
 
-# Import vagrant-shell-scripts
-#SCRIPT_DIR="$(dirname "$0")"
-#"$SCRIPT_DIR/vagrant-shell-scripts/ubuntu.sh"
+PHP_DIRECTORY="/etc/php/7.0"
 
-update_complete_file = "/etc/passdora_apt_complete"
+PHP_DEFAULT_TIMEZONE="Europe/Berlin"
+PHP_UPLOAD_LIMIT="8M"
 
-QUIQQER_DB_NAME = "quiqqer"
-QUIQQER_DB_USER_NAME = "quiqqer"
-QUIQQER_DB_USER_PW = "quiqqer"
 
-if [! -f "$update_complete_file"]; then
+function php_Echo() {
+    echo -e "\033[0;32mphp: $1\033[0m"
+}
 
-    # Check if device is online
-    wget -q --spider https://update.quiqqer.com
 
-    if [ $? -eq 1 ]; then
-        echo "You need an internet connection to run the script."
-        exit
-    fi
+function php_AppendToConfig() {
+    echo $1 | sudo tee --append $PHP_DIRECTORY/cli/conf.d/passdora.ini > /dev/null
+    echo $1 | sudo tee --append $PHP_DIRECTORY/fpm/conf.d/passdora.ini > /dev/null
+}
 
-    sudo apt update -y
-    sudo apt full-upgrade -y
-    sudo apt install php nginx mysql php-curl php-dom php-mbstring php-xml php-zip php-imagick php-gd php-mysql php-bcmath php-dev libsodium-dev php-libsodium -y
+
+function php_SetTimezone() {
+    php_AppendToConfig "date.timezone = $PHP_DEFAULT_TIMEZONE"
+}
+
+
+function php_SetUploadLimit() {
+    php_AppendToConfig "upload_max_filesize = $PHP_UPLOAD_LIMIT"
+}
+
+
+function php_ExecuteStep() {
+    php_Echo "Setting default timezone..."
+    php_SetTimezone
     
-    sudo touch "$update_complete_file"
-    
-    # Necessary?
-    sudo shutdown now -r
-fi
-
-
-# Todo: set MySQL root-User PW?
-
-
-# Create QUIQQER DB & User and grant him access to the DB
-sql_query = "CREATE DATABASE $QUIQQER_DB_NAME; CREATE USER '$QUIQQER_DB_USER_NAME'@'localhost' IDENTIFIED BY '$QUIQQER_DB_USER_PW'; GRANT ALL ON $QUIQQER_DB_NAME.* TO '$QUIQQER_DB_USER_NAME'@'localhost';"
-
-mysql -u "root" -e "$sql_query";
-
+    php_Echo "Setting upload limit..."
+    php_SetUploadLimit
+}
 
