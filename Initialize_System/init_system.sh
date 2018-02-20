@@ -13,6 +13,7 @@ if ! isInitialized; then
     coloredEcho "Initializing Passdora..."
 
     :'
+    # Set ssh password
     SSH_PW=$(getRandomString)    
     setSshPassword $SSH_PW 
     coloredEcho "ssh password set to: \033[0m$SSH_PW"   
@@ -20,12 +21,23 @@ if ! isInitialized; then
     '
     
     :'
+    # Set database password
     DB_PW=$(getRandomString)
     setDbPassword $DB_PW
     coloredEcho "Database quiqqer-user password set to: \033[0m$DB_PW"   
     storePassword "db_pw" $DB_PW
     '
     
+    :'
+    # Set QUIQQER admin-user password
+    QUIQQER_PW=$(getRandomString)
+    setQuiqqerPassword $DB_PW
+    coloredEcho "QUIQQER password set to: \033[0m$DB_PW"   
+    storePassword "quiqqer_pw" $DB_PW
+    '
+    
+    setInitialized
+        
     coloredEcho "Initialization completed."
 fi
 
