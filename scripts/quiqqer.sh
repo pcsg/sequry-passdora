@@ -27,7 +27,7 @@ function quiqqer_SetDirPermissions() {
 
 function quiqqer_CopyPresets() {
     # Template Preset
-    sudo cp files/preset.json /var/www/html/templates/presets/default.json
+    sudo cp files/default.json /var/www/html/templates/presets/default.json
     
     # Setup Preset
     sudo mkdir -p /var/www/html/var/tmp
