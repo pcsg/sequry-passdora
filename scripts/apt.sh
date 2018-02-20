@@ -10,22 +10,13 @@ function apt_Echo() {
 }
 
 
-
-# Notice: 0 means success/true in bash
 function apt_IsUpdated() {
     test -f "$APT_UPDATE_COMPLETE_FILE"
 }
 
 
-
 function apt_Update() {
     sudo apt update -y
-}
-
-
-
-function apt_DistUpgrade() {
-    sudo apt dist-upgrade -y
 }
 
 
@@ -34,11 +25,9 @@ function apt_FullUpgrade() {
 }
 
 
-
 function apt_InstallPackages() {
     sudo apt install ssl-cert nginx mysql-server php-fpm php-curl php-dom php-mbstring php-xml php-zip php-imagick php-gd php-mysql php-bcmath php-dev libsodium-dev php-libsodium -y
 }
-
 
     
 function apt_WriteUpdateCompleteFile() {
@@ -46,21 +35,16 @@ function apt_WriteUpdateCompleteFile() {
 }
 
 
-
 function apt_AutoRemove() {
     sudo apt autoremove -y
 }
-
 
 
 function apt_ExecuteStep() {   
     if ! apt_IsUpdated; then
         apt_Echo "Updating package list..."
         apt_Update
-       
-        apt_Echo "Upgrading distribution..."
-        apt_DistUpgrade
-       
+              
         apt_Echo "Upgrading default packages..."
         apt_FullUpgrade
        
