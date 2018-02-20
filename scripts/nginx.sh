@@ -12,6 +12,7 @@ function nginx_importConfig() {
     echo "include /var/www/html/etc/nginx/nginx.conf;" | sudo tee $NGINX_PATH/sites-available/default > /dev/null
 }
 
+
 function nginx_ExecuteStep() {
     mysql_Echo "Importing QUIQQER config..."
     nginx_importConfig
