@@ -12,9 +12,7 @@
     "start_layout": "layout\/startPage",
     "default_layout": "layout\/noSidebar"
   },
-  "packages": {
-    "pcsg\/grouppasswordmanager": "dev-halite3"
-  },
+  "packages": {},
   "meta": {
     "name": {
       "en_EN": "Passdora",
