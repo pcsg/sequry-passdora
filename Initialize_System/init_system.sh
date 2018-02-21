@@ -12,31 +12,27 @@ trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 if ! isInitialized; then
     coloredEcho "Initializing Passdora..."
 
-    :'
+    
     # Set ssh password
-    SSH_PW=$(getRandomString)    
-    setSshPassword $SSH_PW 
-    coloredEcho "ssh password set to: \033[0m$SSH_PW"   
-    storePassword "ssh_pw" $SSH_PW 
-    '
+    #SSH_PW=$(getRandomString)    
+    #setSshPassword $SSH_PW 
+    #coloredEcho "ssh password set to: \033[0m$SSH_PW"   
+    #storePassword "ssh_pw" $SSH_PW 
     
-    :'
+    
     # Set database password
-    DB_PW=$(getRandomString)
-    setDbPassword $DB_PW
-    coloredEcho "Database quiqqer-user password set to: \033[0m$DB_PW"   
-    storePassword "db_pw" $DB_PW
-    '
+    #DB_PW=$(getRandomString)
+    #setDbPassword $DB_PW
+    #coloredEcho "Database quiqqer-user password set to: \033[0m$DB_PW"   
+    #storePassword "db_pw" $DB_PW
     
-    :'
-    # Set QUIQQER admin-user password
-    QUIQQER_PW=$(getRandomString)
-    setQuiqqerPassword $DB_PW
-    coloredEcho "QUIQQER password set to: \033[0m$DB_PW"   
-    storePassword "quiqqer_pw" $DB_PW
-    '
     
-    setInitialized
+    # Reset QUIQQER admin-user password to random value
+    QUIQQER_PW=$(resetQuiqqerPassword)    
+    coloredEcho "QUIQQER admin password set to: \033[0m$QUIQQER_PW"   
+    storePassword "quiqqer_pw" $QUIQQER_PW
+    
+    #setInitialized
         
     coloredEcho "Initialization completed."
 fi

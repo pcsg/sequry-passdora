@@ -41,9 +41,8 @@ function setDbPassword() {
 
 
 # Sets the QUIQQER admin-user password to the given parameter
-function setQuiqqerPassword() {
-    echo "todo"
-    # sudo php /var/www/html/quiqqer.php password-reset
+function resetQuiqqerPassword() {
+    printf "admin\ny\ny\n" | sudo php /var/www/html/quiqqer.php password-reset | sed -n -e "s/.*password is '\(.*\)'.*/\1/p"
 }
 
 
