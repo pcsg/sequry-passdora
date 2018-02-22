@@ -18,12 +18,12 @@ trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 echo -e "\033[0;32mStarting setup...\033[0m"
 
-#apt_ExecuteStep
+apt_ExecuteStep
 mysql_ExecuteStep
-#php_ExecuteStep
+php_ExecuteStep
 quiqqer_ExecuteStep
-#nginx_ExecuteStep
-#system_ExecuteStep
+nginx_ExecuteStep
+system_ExecuteStep
 
 echo -e "\033[0;32mSetup completed.\033[0m"
 
