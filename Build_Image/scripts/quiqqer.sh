@@ -65,6 +65,16 @@ function quiqqer_importSnakeoilCerts() {
 }
 
 
+# Imports the initial info page into QUIQQER
+function quiqqer_ImportInitPage() {    
+    # Rename QUIQQER index.php
+    sudo mv /var/www/html/index.php /var/www/html/index.php.quiqqer
+
+    # Copy init pages into QUIQQER directory
+    sudo cp files/index.php.init /var/www/html/index.php
+}
+
+
 # Executes the QUIQQER setup steps in the correct order
 function quiqqer_ExecuteStep() {
     quiqqer_Echo "Downloading setup..."
@@ -85,6 +95,9 @@ function quiqqer_ExecuteStep() {
 
     quiqqer_Echo "Importing snakeoil certificates..."
     quiqqer_importSnakeoilCerts
+    
+    quiqqer_Echo "Importing initial info files..."
+    quiqqer_ImportInitPage
     
     
     quiqqer_Echo "Setting directory permissions..."
