@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 NGINX_PATH="/etc/nginx"
+NGINX_TIMEOUT=600
 
 # Echos a message from nginx context
 function nginx_Echo() {
@@ -15,9 +16,17 @@ function nginx_importConfig() {
 }
 
 
+function nginx_SetTimeout() {
+    sudo sed -i "s/http {/http {\n\n\tfastcgi_read_timeout 600;/" /etc/nginx/nginx.conf
+}
+
+
 # Executes the nginx setup steps in correct order
 function nginx_ExecuteStep() {
-    mysql_Echo "Importing QUIQQER config..."
+    nginx_Echo "Importing QUIQQER config..."
     nginx_importConfig
+    
+    nginx_Echo "Setting timeout to $NGINX_TIMEOUT seconds..."
+    nginx_SetTimeout
 }
 
