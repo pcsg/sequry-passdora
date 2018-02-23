@@ -48,6 +48,6 @@ function resetQuiqqerPassword() {
 
 # Writes a password to the passdora passwords file
 function storePassword() {
-    echo "$1=\"$2\"" | sudo tee --append /var/www/html/etc/passdora_passwords.ini > /dev/null
+    echo "$1=\"$2\"" | sudo tee --append /var/www/html/etc/passdora_passwords.ini.php > /dev/null
 }
 

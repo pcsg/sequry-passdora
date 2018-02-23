@@ -11,7 +11,7 @@ if (isset($_GET['confirmed'])) {
     exit;
 }
 
-define("PASSWORDS", parse_ini_file('./etc/passdora_passwords.ini'));
+define("PASSWORDS", parse_ini_file('./etc/passdora_passwords.ini.php'));
 
 ?>
 
