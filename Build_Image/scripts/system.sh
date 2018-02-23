@@ -25,6 +25,13 @@ function system_SetGpuMem() {
 }
 
 
+# Restarts all components for the webserver (nginx, fpm)
+function system_RestartWebserverComponents() {
+    sudo /etc/init.d/php7.0-fpm restart
+    sudo /etc/init.d/nginx restart
+}
+
+
 # Executes the system setup steps in correct order
 function system_ExecuteStep() {
     system_Echo "Changing hostname..."

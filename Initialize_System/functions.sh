@@ -36,7 +36,7 @@ function setSshPassword() {
 # Sets the QUIQQER database password to the given parameter and updates the QUIQQER config
 function setDbPassword() {
     sudo mysql -e "SET PASSWORD FOR quiqqer@localhost = PASSWORD('$1');"
-    sudo sed -i "s/password=\"quiqqer\"/password=\"$1\"/" /var/www/html/etc/conf.ini.php
+    sudo sed -i "s/password=\".*\"/password=\"$1\"/" /var/www/html/etc/conf.ini.php
 }
 
 
@@ -46,8 +46,13 @@ function resetQuiqqerPassword() {
 }
 
 
+function initPasswordFile() {
+    echo ";<?php echo \"You should stop sniffing around...\"; exit; ?>" | sudo tee --append /var/www/html/etc/passdora_passwords.ini.php > /dev/null
+}
+
+
 # Writes a password to the passdora passwords file
 function storePassword() {
-    echo "$1=$2" | sudo tee --append /etc/passdora_passwords.ini > /dev/null
+    echo "$1=\"$2\"" | sudo tee --append /var/www/html/etc/passdora_passwords.ini.php > /dev/null
 }
 
