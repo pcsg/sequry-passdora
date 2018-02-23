@@ -4,6 +4,7 @@ PHP_DIRECTORY="/etc/php/7.0"
 
 PHP_DEFAULT_TIMEZONE="Europe/Berlin"
 PHP_UPLOAD_LIMIT="8M"
+PHP_TIMEOUT=600
 
 
 # Echos a message from php context
@@ -31,6 +32,12 @@ function php_SetUploadLimit() {
 }
 
 
+function php_SetTimeouts() {
+    sudo sed -i "s/max_execution_time = [0-9]*/max_execution_time = $1/" /etc/php/7.0/fpm/php.ini
+    sudo sed -i "s/max_execution_time = [0-9]*/max_execution_time = $1/" /etc/php/7.0/cli/php.ini
+}
+
+
 # Executes the php setup steps in correct order
 function php_ExecuteStep() {
     php_Echo "Setting default timezone..."
@@ -38,5 +45,8 @@ function php_ExecuteStep() {
     
     php_Echo "Setting upload limit..."
     php_SetUploadLimit
+    
+    php_Echo "Setting timeouts to $PHP_TIMEOUT seconds..."
+    php_SetTimeouts $PHP_TIMEOUT
 }
 
