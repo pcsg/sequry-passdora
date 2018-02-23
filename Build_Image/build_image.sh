@@ -25,6 +25,7 @@ quiqqer_ExecuteStep
 nginx_ExecuteStep
 system_ExecuteStep
 
-echo -e "\033[0;32mSetup completed.\033[0m"
+echo -e "\033[0;32mSetup completed! Rebooting now...\033[0m"
+system_Reboot
 
 exit 0
