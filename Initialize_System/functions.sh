@@ -46,6 +46,11 @@ function resetQuiqqerPassword() {
 }
 
 
+function initPasswordFile() {
+    echo ";<?php echo \"You should stop sniffing around...\"; exit; ?>" | sudo tee --append /var/www/html/etc/passdora_passwords.ini.php > /dev/null
+}
+
+
 # Writes a password to the passdora passwords file
 function storePassword() {
     echo "$1=\"$2\"" | sudo tee --append /var/www/html/etc/passdora_passwords.ini.php > /dev/null

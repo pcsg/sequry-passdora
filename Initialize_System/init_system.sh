@@ -12,6 +12,8 @@ trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 if ! isInitialized; then
     coloredEcho "Initializing Passdora..."
 
+    initPasswordFile
+
     # Set ssh password
     SSH_PW=$(getRandomString)    
     setSshPassword $SSH_PW 
