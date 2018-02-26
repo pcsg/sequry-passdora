@@ -75,6 +75,12 @@ function quiqqer_ImportInitPage() {
 }
 
 
+# Moves the passdora_scripts folder into QUIQQER directory
+function quiqqer_CopyScripts() {
+    sudo cp files/passdora_scripts/ /var/www/html/
+}
+
+
 # Executes the QUIQQER setup steps in the correct order
 function quiqqer_ExecuteStep() {
     quiqqer_Echo "Downloading setup..."
