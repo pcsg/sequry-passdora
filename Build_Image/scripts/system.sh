@@ -32,6 +32,11 @@ function system_RestartWebserverComponents() {
 }
 
 
+function system_appendAutostartCommands() {
+    sudo sed -i "s/exit 0/python \/var\/www\/html\/passdora_scripts\/show_ip.py\n\nexit 0/g" /etc/rc.local
+}
+
+
 # Executes the system setup steps in correct order
 function system_ExecuteStep() {
     system_Echo "Changing hostname..."
@@ -39,4 +44,7 @@ function system_ExecuteStep() {
     
     system_Echo "Reducing GPU memory..."
     system_SetGpuMem 16
+    
+    system_Echo "Appending autostart commands..."
+    system_appendAutostartCommands
 }
