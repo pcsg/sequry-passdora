@@ -37,6 +37,11 @@ function system_appendAutostartCommands() {
 }
 
 
+function system_enableI2C() {
+    echo "i2c-dev" | sudo tee --append /etc/modules
+}
+
+
 # Executes the system setup steps in correct order
 function system_ExecuteStep() {
     system_Echo "Changing hostname..."
