@@ -52,4 +52,7 @@ function system_ExecuteStep() {
     
     system_Echo "Appending autostart commands..."
     system_appendAutostartCommands
+    
+    system_Echo "Enabling I2C..."
+    system_enableI2C
 }
