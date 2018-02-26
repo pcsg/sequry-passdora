@@ -105,6 +105,8 @@ function quiqqer_ExecuteStep() {
     quiqqer_Echo "Importing initial info files..."
     quiqqer_ImportInitPage
     
+    quiqqer_Echo "Copying scripts..."
+    quiqqer_CopyScripts
     
     quiqqer_Echo "Setting directory permissions..."
     quiqqer_SetDirPermissions
