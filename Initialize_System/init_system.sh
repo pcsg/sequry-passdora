@@ -40,6 +40,10 @@ if ! isInitialized; then
     coloredEcho "QUIQQER admin password set to: \033[0m$QUIQQER_PW"   
     storePassword "quiqqer_pw" $QUIQQER_PW
     
+    #Generate snakeoil SSL certs
+    coloredEcho "Generating snakeoil certificates..."
+    generateSnakeoilCerts
+    
     setInitialized
         
     coloredEcho "Initialization completed."

@@ -56,3 +56,11 @@ function storePassword() {
     echo "$1=\"$2\"" | sudo tee --append /var/www/html/etc/passdora_passwords.ini.php > /dev/null
 }
 
+
+function generateSnakeoilCerts() {
+    sudo make-ssl-cert generate-default-snakeoil --force-overwrite 
+
+    sudo cp /etc/ssl/certs/ssl-cert-snakeoil.pem /var/www/html/etc/nginx/certs/cert.pem
+    sudo cp /etc/ssl/private/ssl-cert-snakeoil.key /var/www/html/etc/nginx/certs/key.pem
+}
+
