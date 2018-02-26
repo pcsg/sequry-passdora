@@ -42,6 +42,11 @@ function system_enableI2C() {
 }
 
 
+function system_setPermissions() {
+    sudo adduser www-data gpio
+}
+
+
 # Executes the system setup steps in correct order
 function system_ExecuteStep() {
     system_Echo "Changing hostname..."
@@ -55,4 +60,7 @@ function system_ExecuteStep() {
     
     system_Echo "Enabling I2C..."
     system_enableI2C
+    
+    system_Echo "Setting user permissions..."
+    system_setPermissions
 }
