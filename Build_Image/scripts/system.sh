@@ -39,6 +39,7 @@ function system_appendAutostartCommands() {
 
 function system_enableI2C() {
     echo "i2c-dev" | sudo tee --append /etc/modules > /dev/null
+    sudo sed -i "s/\#\?dtparam=i2c_arm=\(on\|off\)/dtparam=i2c_arm=on/g" /boot/config.txt
 }
 
 
