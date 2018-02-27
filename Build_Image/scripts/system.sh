@@ -38,7 +38,7 @@ function system_appendAutostartCommands() {
 
 
 function system_enableI2C() {
-    echo "i2c-dev" | sudo tee --append /etc/modules
+    echo "i2c-dev" | sudo tee --append /etc/modules > /dev/null
 }
 
 
