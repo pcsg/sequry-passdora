@@ -8,6 +8,7 @@ trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 . functions.sh
+. ../Build_Image/scripts/system.sh
 
 if ! isInitialized; then
     coloredEcho "Initializing Passdora..."
@@ -40,11 +41,18 @@ if ! isInitialized; then
     coloredEcho "QUIQQER admin password set to: \033[0m$QUIQQER_PW"   
     storePassword "quiqqer_pw" $QUIQQER_PW
     
+    
     #Generate snakeoil SSL certs
     coloredEcho "Generating snakeoil certificates..."
     generateSnakeoilCerts
     
+    
+    # Restart nginx & php-fpm
+    system_RestartWebserverComponents
+
+    
     setInitialized
+    
         
     coloredEcho "Initialization completed."
 fi
