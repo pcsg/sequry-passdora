@@ -23,14 +23,14 @@ if ! isInitialized; then
     initPasswordFile
 
     # Set ssh password
-    SSH_PW=$(getRandomString)    
+    SSH_PW=$(getRandomString 15)
     setSshPassword $SSH_PW 
     coloredEcho "ssh password set to: \033[0m$SSH_PW"   
     storePassword "ssh_pw" $SSH_PW 
     
     
     # Set database password
-    DB_PW=$(getRandomString)
+    DB_PW=$(getRandomString 15)
     setDbPassword $DB_PW
     coloredEcho "Database quiqqer-user password set to: \033[0m$DB_PW"   
     storePassword "db_pw" $DB_PW
