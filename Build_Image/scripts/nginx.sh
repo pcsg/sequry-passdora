@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+################################################
+#                                              #
+# This file contains functions to set up nginx #
+#                                              #
+# Author: Jan Wennrich (PCSG)                  #
+#                                              #
+################################################
+
 NGINX_PATH="/etc/nginx"
 NGINX_TIMEOUT=600
 

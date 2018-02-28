@@ -1,3 +1,13 @@
+'''
+##################################################################
+#                                                                #
+# Class handling clearing and printing to the connected display. #
+#                                                                #
+# Author: Jan Wennrich (PCSG)                                    #
+#                                                                #
+##################################################################
+'''
+
 from lib.display.lcddriver import lcd
 
 class Display:

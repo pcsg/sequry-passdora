@@ -1,3 +1,13 @@
+'''
+########################################################################
+#                                                                      #
+# Function to get the devices local IP address                         #
+#                                                                      #
+# Author: Smerlin (Stackoverflow: https://stackoverflow.com/a/1947766) #
+#                                                                      #
+########################################################################
+'''
+
 import os
 import socket
 
@@ -31,4 +41,3 @@ def get_lan_ip():
             except IOError:
                 pass
     return ip
-

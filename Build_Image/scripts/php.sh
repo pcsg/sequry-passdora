@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+##############################################
+#                                            #
+# This file contains functions to set up php #
+#                                            #
+# Author: Jan Wennrich (PCSG)                #
+#                                            #
+##############################################
+
 PHP_DIRECTORY="/etc/php/7.0"
 
 PHP_DEFAULT_TIMEZONE="Europe/Berlin"

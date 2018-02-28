@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+##################################################
+#                                                #
+# This file contains functions to set up QUIQQER #
+#                                                #
+# Author: Jan Wennrich (PCSG)                    #
+#                                                #
+##################################################
+
+
 # Echos a message from QUIQQER context
 function quiqqer_Echo() {
     echo -e "\033[0;32mquiqqer: $1\033[0m"

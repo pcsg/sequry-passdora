@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+###############################################################
+#                                                             #
+# This script sets up a basic system for Passdora.            #
+# The script has to be run on a Raspian OS.                   #
+# An image of the system can then be created and distributed. #
+#                                                             #
+# Author: Jan Wennrich (PCSG)                                 #
+#                                                             #
+###############################################################
+
+
+
 # exit when any command fails
 set -e
 

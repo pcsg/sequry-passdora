@@ -1,12 +1,12 @@
 '''
-#########################################################################################################
-                                                                                                        #
-Waits for a button press which lasts over a defined duration on a defined GPIO pin (pulling pin down).  #
-If the script was pressed long enough the backup script is executed                                     #
-                                                                                                        #
-Author: Jan Wennrich (PCSG)                                                                             #
-                                                                                                        #
-#########################################################################################################
+##########################################################################################################
+#                                                                                                        #
+# Waits for a button press which lasts over a defined duration on a defined GPIO pin (pulling pin down). #
+# If the script was pressed long enough the backup script is executed                                    #
+#                                                                                                        #
+# Author: Jan Wennrich (PCSG)                                                                            #
+#                                                                                                        #
+##########################################################################################################
 '''
 
 import RPi.GPIO as GPIO

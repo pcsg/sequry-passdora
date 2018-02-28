@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+############################################################
+#                                                          #
+# This file contains various function to set up the system #
+#                                                          #
+# Author: Jan Wennrich (PCSG)                              #
+#                                                          #
+############################################################
+
+
 # Echos a message from system context
 function system_Echo() {
     echo -e "\033[0;32msystem: $1\033[0m"

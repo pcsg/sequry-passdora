@@ -1,5 +1,14 @@
 <?php
 
+/***************************************************************************************
+*                                                                                      *
+* Initialization page displaying all necessary passwords to the user.                  *
+* When the user confirms this page the page replaces itself with the QUIQQER index.php *
+*                                                                                      *
+* Author: Jan Wennrich (PCSG)                                                          *
+*                                                                                      *
+***************************************************************************************/
+
 if (isset($_GET['confirming'])) {
 
     $cmdOutput = "";

@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 
+#######################################################
+#                                                     #
+# This file contains functions to set up apt packages #
+#                                                     #
+# Author: Jan Wennrich (PCSG)                         #
+#                                                     #
+#######################################################
+
 . scripts/system.sh
+
 
 APT_UPDATE_COMPLETE_FILE="/etc/passdora_apt_complete"
 

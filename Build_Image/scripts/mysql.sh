@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+################################################
+#                                              #
+# This file contains functions to set up MySQL #
+#                                              #
+# Author: Jan Wennrich (PCSG)                  #
+#                                              #
+################################################
+
 QUIQQER_DB_NAME="quiqqer"
 QUIQQER_DB_USER_NAME="quiqqer"
 QUIQQER_DB_USER_PW="quiqqer"
