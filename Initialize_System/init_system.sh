@@ -50,7 +50,14 @@ if ! isInitialized; then
     # Restart nginx & php-fpm
     system_RestartWebserverComponents
 
-    
+
+    # Generate and store restore key
+    initRestoreKeyFile
+    RESTORE_KEY=$(generateRestoreKey)
+    coloredEcho "Restore Key: \033[0m${RESTORE_KEY}"
+    storeRestoreKey ${RESTORE_KEY}
+
+
     setInitialized
     
         

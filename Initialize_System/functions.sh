@@ -2,6 +2,7 @@
 
 IS_INITIALIZED_FILE="/etc/passdora_is_initialized"
 
+FILE_RESTORE_KEY="/var/www/html/etc/passdora_restore_key.ini.php"
 
 # Echos a green message
 function coloredEcho() {
@@ -47,7 +48,7 @@ function resetQuiqqerPassword() {
 
 
 function initPasswordFile() {
-    echo ";<?php echo \"You should stop sniffing around...\"; exit; ?>" | sudo tee --append /var/www/html/etc/passdora_passwords.ini.php > /dev/null
+    echo ";<?php echo \"You should stop sniffing around...\"; exit; ?>" | sudo tee /var/www/html/etc/passdora_passwords.ini.php > /dev/null
 }
 
 
@@ -57,10 +58,26 @@ function storePassword() {
 }
 
 
+# Initializes the restore key file
+function initRestoreKeyFile() {
+    echo ";<?php echo \"You should stop sniffing around...\"; exit; ?>" | sudo tee ${FILE_RESTORE_KEY} > /dev/null
+}
+
+
+# Stores a given key inside the restore key file
+function storeRestoreKey() {
+    echo "restore_key=\"$1\"" | sudo tee --append ${FILE_RESTORE_KEY} > /dev/null
+}
+
+
+# Generates a restore key
+function generateRestoreKey() {
+    echo $(getRandomString 5)-$(getRandomString 5)-$(getRandomString 5)-$(getRandomString 5)-$(getRandomString 5)
+}
+
 function generateSnakeoilCerts() {
-    sudo make-ssl-cert generate-default-snakeoil --force-overwrite 
+    sudo make-ssl-cert generate-default-snakeoil --force-overwrite
 
     sudo cp /etc/ssl/certs/ssl-cert-snakeoil.pem /var/www/html/etc/nginx/certs/cert.pem
     sudo cp /etc/ssl/private/ssl-cert-snakeoil.key /var/www/html/etc/nginx/certs/key.pem
 }
-
