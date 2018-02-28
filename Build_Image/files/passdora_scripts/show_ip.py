@@ -14,9 +14,20 @@ import socket
 
 Display = Display()
 
-hostname = "Host: "+socket.gethostname()
-ip = "IP: "+get_lan_ip()    
+hostname = socket.gethostname()
+ip = get_lan_ip()
 
-print hostname
-print ip
-Display.show(hostname, ip)
+hostname_string = "Host:"
+if len(hostname) < 15:
+    hostname_string += " "
+hostname_string += hostname
+
+ip_string = "IP:"
+if len(ip) < 15:
+    ip_string += " "
+ip_string += ip
+
+print hostname_string
+print ip_string
+Display.show(hostname_string, ip_string)
+
