@@ -1,8 +1,25 @@
 #!/usr/bin/env bash
 
-IS_INITIALIZED_FILE="/etc/passdora_is_initialized"
+#########################################################################
+#                                                                       #
+# This file contains functions needed to initialize the Passdora system #
+#                                                                       #
+# Author: Jan Wennrich (PCSG)                                           #
+#                                                                       #
+#########################################################################
 
+
+
+# Location of the file created when system was initialized
+FILE_IS_INITIALIZED="/etc/passdora_is_initialized"
+
+# Location of the file containing the restore key
 FILE_RESTORE_KEY="/var/www/html/etc/passdora_restore_key.ini.php"
+
+# Location of the temporary file containing the passwords
+FILE_PASSWORDS="/var/www/html/etc/passdora_passwords.ini.php"
+
+
 
 # Echos a green message
 function coloredEcho() {
@@ -18,13 +35,13 @@ function getRandomString() {
 
 # Returns if the initialize script was already run
 function isInitialized() {
-    test -f "$IS_INITIALIZED_FILE"
+    test -f "$FILE_IS_INITIALIZED"
 }
 
 
 # Creates the file to set the script as initialized
 function setInitialized() {
-    sudo touch $IS_INITIALIZED_FILE
+    sudo touch ${FILE_IS_INITIALIZED}
 }
 
 
@@ -47,14 +64,15 @@ function resetQuiqqerPassword() {
 }
 
 
+# Initializes the temporary password file
 function initPasswordFile() {
-    echo ";<?php echo \"You should stop sniffing around...\"; exit; ?>" | sudo tee /var/www/html/etc/passdora_passwords.ini.php > /dev/null
+    echo ";<?php echo \"You should stop sniffing around...\"; exit; ?>" | sudo tee ${FILE_PASSWORDS} > /dev/null
 }
 
 
 # Writes a password to the passdora passwords file
 function storePassword() {
-    echo "$1=\"$2\"" | sudo tee --append /var/www/html/etc/passdora_passwords.ini.php > /dev/null
+    echo "$1=\"$2\"" | sudo tee --append ${FILE_PASSWORDS} > /dev/null
 }
 
 
@@ -75,6 +93,8 @@ function generateRestoreKey() {
     echo $(getRandomString 5)-$(getRandomString 5)-$(getRandomString 5)-$(getRandomString 5)-$(getRandomString 5)
 }
 
+
+# Generates and copies the snakeoil certs
 function generateSnakeoilCerts() {
     sudo make-ssl-cert generate-default-snakeoil --force-overwrite
 
