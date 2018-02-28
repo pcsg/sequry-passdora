@@ -11,7 +11,7 @@ function coloredEcho() {
 
 # Returns a random 15-digit alphanumeric string
 function getRandomString() {
-    head /dev/urandom | tr -dc A-Za-z0-9 | head -c${1}
+    head /dev/urandom | tr -dc A-HJ-NP-Z1-9 | head -c${1}
 }
 
 
