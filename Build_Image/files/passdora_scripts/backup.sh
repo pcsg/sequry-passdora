@@ -20,6 +20,10 @@ GENERAL_BACKUP_FOLDER=/home/pi/backups
 # Folder where files are temporarily copied to
 TEMP_BACKUP_FOLDER=${GENERAL_BACKUP_FOLDER}/${DATE}
 
+# Parse restore-key .ini-file and assign variable containg the key
+source <(grep = /var/www/html/etc/passdora_restore_key.ini.php)
+RESTORE_KEY=$restore_key
+
 
 # Create backup folder
 echo "Creating backup folder..."
@@ -39,7 +43,7 @@ sudo cp -r /var/www/html/etc ${TEMP_BACKUP_FOLDER}/
 (
     cd ${TEMP_BACKUP_FOLDER}
     echo "Packing everything into an encrypted archive..."
-    tar -cz * | gpg -c --batch --yes --passphrase 1234 -o ${GENERAL_BACKUP_FOLDER}/${DATE}.tgz.gpg 
+    tar -cz * | gpg -c --batch --yes --passphrase ${RESTORE_KEY} -o ${GENERAL_BACKUP_FOLDER}/${DATE}.tgz.gpg 
 )
 
 # Remove temp folder
