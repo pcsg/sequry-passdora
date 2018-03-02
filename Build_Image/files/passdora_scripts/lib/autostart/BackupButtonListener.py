@@ -14,6 +14,7 @@ import time
 import subprocess
 
 from lib.autostart.AbstractAutostart import AbstractAutostart
+from lib.display.Display import Display
 
 
 class BackupButtonListener(AbstractAutostart):
@@ -45,6 +46,8 @@ class BackupButtonListener(AbstractAutostart):
         button_was_pressed = False
         button_held_time = 0
 
+        display = Display.get_instance()
+
         # Print what the user can do
         print(self.MESSAGE_INSTRUCTIONS)
 
@@ -54,6 +57,8 @@ class BackupButtonListener(AbstractAutostart):
             # Check if the button is currently pressed
             if not GPIO.input(self.BUTTON_GPIO_PIN):
 
+                display.lock(self)
+
                 # Time the button press starts
                 button_press_start_time = time.time()
 
@@ -62,6 +67,7 @@ class BackupButtonListener(AbstractAutostart):
                     if not button_was_pressed:
                         button_was_pressed = True
                         print("Button pressed. Hold for {0} seconds to create a backup...".format(self.BUTTON_HOLD_TIME))
+                        display.show("Hold button for", "3 seconds", self)
 
                     # Increase the time the button is held
                     button_held_time = time.time() - button_press_start_time
@@ -72,10 +78,15 @@ class BackupButtonListener(AbstractAutostart):
                     # Check if button was pressed long enough
                     if button_held_time > self.BUTTON_HOLD_TIME:
                         print('Creating backup... You may release the button now.')
+                        display.show("Creating Backup", "", self)
+                        display.show_loader(2, self)
                         subprocess.Popen('/var/www/html/passdora_scripts/backup.sh').wait()
                         print("Backup created!")
+                        display.hide_loader(self)
+                        display.show("Backup", "created", self)
                     else:
                         print("Button was not pressed long enough!")
+                        display.show("Button released", "too soon", self)
 
                     # Wait a few seconds to prevent backup starting again immediately
                     print('Waiting {0} seconds before the button can be pressed again...'.format(
@@ -88,5 +99,8 @@ class BackupButtonListener(AbstractAutostart):
 
                     # Print that the button can be used again
                     print(self.MESSAGE_INSTRUCTIONS)
+
+                display.unlock(self)
+                display.show_default()
 
             time.sleep(self.SLEEP_TIME)
