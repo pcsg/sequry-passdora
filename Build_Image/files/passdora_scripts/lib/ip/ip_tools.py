@@ -1,43 +1,25 @@
-'''
-########################################################################
-#                                                                      #
-# Function to get the devices local IP address                         #
-#                                                                      #
-# Author: Smerlin (Stackoverflow: https://stackoverflow.com/a/1947766) #
-#                                                                      #
-########################################################################
-'''
+"""
+#########################################################################################
+#                                                                                       #
+# Function to get the devices local IP address                                          #
+#                                                                                       #
+# Author: Jamieson Becker (Stackoverflow: https://stackoverflow.com/a/28950776/3002417) #
+#                                                                                       #
+#########################################################################################
+"""
 
-import os
 import socket
 
-if os.name != "nt":
-    import fcntl
-    import struct
-
-    def get_interface_ip(ifname):
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s',
-                                ifname[:15]))[20:24])
 
 def get_lan_ip():
-    ip = socket.gethostbyname(socket.gethostname())
-    if ip.startswith("127.") and os.name != "nt":
-        interfaces = [
-            "eth0",
-            "eth1",
-            "eth2",
-            "wlan0",
-            "wlan1",
-            "wifi0",
-            "ath0",
-            "ath1",
-            "ppp0",
-            ]
-        for ifname in interfaces:
-            try:
-                ip = get_interface_ip(ifname)
-                break
-            except IOError:
-                pass
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        ip = s.getsockname()[0]
+    except:
+        ip = '127.0.0.1'
+    finally:
+        s.close()
     return ip
+
