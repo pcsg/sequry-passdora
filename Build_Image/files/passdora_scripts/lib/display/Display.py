@@ -7,6 +7,8 @@
 #                                                                #
 ##################################################################
 """
+import threading
+import time
 
 from lib.display.lcddriver import lcd
 
@@ -18,6 +20,8 @@ class Display:
     __lockingObject = None
 
     __LCD = lcd()
+
+    __isLoaderShowing = False
 
     @staticmethod
     def get_instance():
@@ -62,6 +66,31 @@ class Display:
 
         from lib.autostart.ShowIP import ShowIP
         ShowIP.show()
+        return True
+
+    def show_loader(self, line, caller=None):
+        if not self.can_access(caller):
+            return False
+
+        self.__isLoaderShowing = True
+        threading.Thread(target=self.__loader_thread_function, args=(line, caller)).start()
+        return True
+
+    def __loader_thread_function(self, line, caller):
+        while self.__isLoaderShowing:
+            for i in range(0, 4):
+                if not self.__isLoaderShowing:
+                    break
+
+                loader_text = " " * i + "." + " " * (3 - i)
+                self.show_on_line(line, loader_text, caller)
+                time.sleep(0.1)
+
+    def hide_loader(self, caller=None):
+        if not self.can_access(caller):
+            return False
+
+        self.__isLoaderShowing = False
         return True
 
     def clear(self, caller=None):
