@@ -33,8 +33,8 @@ class BackupButtonListener(AbstractAutostart):
     # Instructions how to use this script
     MESSAGE_INSTRUCTIONS = "Press and hold the button for {0} seconds to create a backup.".format(BUTTON_HOLD_TIME)
 
-    def __init__(self, display, *args, **kwargs):
-        super(BackupButtonListener, self).__init__(display, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(BackupButtonListener, self).__init__(*args, **kwargs)
 
         # Setup GPIO
         GPIO.setmode(GPIO.BCM)
@@ -90,14 +90,3 @@ class BackupButtonListener(AbstractAutostart):
                     print(self.MESSAGE_INSTRUCTIONS)
 
             time.sleep(self.SLEEP_TIME)
-
-
-
-
-
-
-
-
-
-
-

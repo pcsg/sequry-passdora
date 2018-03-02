@@ -1,19 +1,22 @@
 import time
 
+from lib.display.Display import Display
 from lib.ip.ip_tools import *
 from lib.autostart.AbstractAutostart import *
 
 import socket
 
+INTERVAL = 30
+
 
 class ShowIP(AbstractAutostart):
     def run(self):
         while True:
-            self.update(self.Display)
-            time.sleep(30)
+            self.show()
+            time.sleep(INTERVAL)
 
     @staticmethod
-    def update(display):
+    def show():
         hostname = socket.gethostname()
         ip = get_lan_ip()
 
@@ -29,4 +32,4 @@ class ShowIP(AbstractAutostart):
 
         print(hostname_string)
         print(ip_string)
-        display.show(hostname_string, ip_string)
+        Display.get_instance().show(hostname_string, ip_string)
