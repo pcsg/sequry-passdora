@@ -52,13 +52,13 @@ class BackupButtonListener(AbstractAutostart):
         while True:
 
             # Check if the button is currently pressed
-            if GPIO.input(self.BUTTON_GPIO_PIN) == False:
+            if not GPIO.input(self.BUTTON_GPIO_PIN):
 
                 # Time the button press starts
                 button_press_start_time = time.time()
 
                 # While the button is held not longer than the button has to be held...
-                while GPIO.input(self.BUTTON_GPIO_PIN) == False and button_held_time < self.BUTTON_HOLD_TIME:
+                while not GPIO.input(self.BUTTON_GPIO_PIN) and button_held_time < self.BUTTON_HOLD_TIME:
                     if not button_was_pressed:
                         button_was_pressed = True
                         print("Button pressed. Hold for {0} seconds to create a backup...".format(self.BUTTON_HOLD_TIME))
