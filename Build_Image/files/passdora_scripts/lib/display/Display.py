@@ -78,7 +78,7 @@ class Display:
 
         # Only allowed to print to line 1 and 2
         if (line is not 1) and (line is not 2):
-            raise Exception("Can't write to line " + line)
+            raise Exception("Can't write to line " + str(line))
 
         # Place "|" on left and right border, center text in between
         self.__LCD.display_string("|{0}|".format(text.center(18)), line)
