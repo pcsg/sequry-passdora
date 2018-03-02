@@ -14,7 +14,8 @@ from lib.display.lcddriver import lcd
 class Display:
     __instance = None
 
-    isLocked = False
+    __isLocked = False
+    __lockingObject = None
 
     __LCD = lcd()
 
@@ -44,8 +45,17 @@ class Display:
         self.__LCD.clear()
         self.show("", "")
 
-    def lock(self):
-        self.isLocked = True
+    def lock(self, locker):
+        if self.__isLocked:
+            return False
 
-    def unlock(self):
-        self.isLocked = False
+        self.__isLocked = True
+        self.__lockingObject = locker
+        return True
+
+    def unlock(self, locker):
+        if locker is self.__lockingObject:
+            self.__isLocked = False
+            self.__lockingObject = None
+        else:
+            raise Exception("You're not permitted to unlock the display.")
