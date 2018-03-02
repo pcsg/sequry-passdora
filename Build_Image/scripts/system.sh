@@ -46,6 +46,11 @@ function system_appendAutostartCommands() {
 }
 
 
+function system_createCrons() {
+    sudo ln -s /var/www/html/passdora_scripts/backup.sh /etc/cron.daily/backup.sh
+}
+
+
 function system_enableI2C() {
     echo "i2c-dev" | sudo tee --append /etc/modules > /dev/null
     sudo sed -i "s/\#\?dtparam=i2c_arm=\(on\|off\)/dtparam=i2c_arm=on/g" /boot/config.txt
@@ -67,6 +72,9 @@ function system_ExecuteStep() {
     
     system_Echo "Appending autostart commands..."
     system_appendAutostartCommands
+
+    system_Echo "Creating Crons..."
+    system_createCrons
     
     system_Echo "Enabling I2C..."
     system_enableI2C
