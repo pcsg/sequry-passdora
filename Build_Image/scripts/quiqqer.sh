@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+##################################################
+#                                                #
+# This file contains functions to set up QUIQQER #
+#                                                #
+# Author: Jan Wennrich (PCSG)                    #
+#                                                #
+##################################################
+
+
 # Echos a message from QUIQQER context
 function quiqqer_Echo() {
     echo -e "\033[0;32mquiqqer: $1\033[0m"
@@ -59,12 +68,6 @@ function quiqqer_GenerateNginxConfig() {
 }
 
 
-function quiqqer_importSnakeoilCerts() {
-    sudo cp /etc/ssl/certs/ssl-cert-snakeoil.pem /var/www/html/etc/nginx/certs/cert.pem
-    sudo cp /etc/ssl/private/ssl-cert-snakeoil.key /var/www/html/etc/nginx/certs/key.pem
-}
-
-
 # Imports the initial info page into QUIQQER
 function quiqqer_ImportInitPage() {    
     # Rename QUIQQER index.php
@@ -72,6 +75,12 @@ function quiqqer_ImportInitPage() {
 
     # Copy init pages into QUIQQER directory
     sudo cp files/index.php.init /var/www/html/index.php
+}
+
+
+# Moves the passdora_scripts folder into QUIQQER directory
+function quiqqer_CopyScripts() {
+    sudo cp -r files/passdora_scripts/ /var/www/html/
 }
 
 
@@ -92,13 +101,12 @@ function quiqqer_ExecuteStep() {
   
     quiqqer_Echo "Generating nginx config..."
     quiqqer_GenerateNginxConfig
-
-    quiqqer_Echo "Importing snakeoil certificates..."
-    quiqqer_importSnakeoilCerts
     
     quiqqer_Echo "Importing initial info files..."
     quiqqer_ImportInitPage
     
+    quiqqer_Echo "Copying scripts..."
+    quiqqer_CopyScripts
     
     quiqqer_Echo "Setting directory permissions..."
     quiqqer_SetDirPermissions

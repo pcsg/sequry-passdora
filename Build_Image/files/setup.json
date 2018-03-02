@@ -2,7 +2,7 @@
   "step": 32,
   "data": {
     "lang": "de",
-    "version": "dev-master",
+    "version": "dev-dev",
     "template": "template-businesspro",
     "database": {
       "create_new": false,

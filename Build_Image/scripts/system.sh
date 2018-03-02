@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+############################################################
+#                                                          #
+# This file contains various function to set up the system #
+#                                                          #
+# Author: Jan Wennrich (PCSG)                              #
+#                                                          #
+############################################################
+
+
 # Echos a message from system context
 function system_Echo() {
     echo -e "\033[0;32msystem: $1\033[0m"
@@ -32,6 +41,27 @@ function system_RestartWebserverComponents() {
 }
 
 
+function system_appendAutostartCommands() {
+    sudo sed -i "s/^exit 0/sudo python \/var\/www\/html\/passdora_scripts\/script_loader.py\n\nexit 0/g" /etc/rc.local
+}
+
+
+function system_createCrons() {
+    sudo ln -s /var/www/html/passdora_scripts/backup.sh /etc/cron.daily/backup.sh
+}
+
+
+function system_enableI2C() {
+    echo "i2c-dev" | sudo tee --append /etc/modules > /dev/null
+    sudo sed -i "s/\#\?dtparam=i2c_arm=\(on\|off\)/dtparam=i2c_arm=on/g" /boot/config.txt
+}
+
+
+function system_setPermissions() {
+    sudo adduser www-data gpio
+}
+
+
 # Executes the system setup steps in correct order
 function system_ExecuteStep() {
     system_Echo "Changing hostname..."
@@ -39,4 +69,16 @@ function system_ExecuteStep() {
     
     system_Echo "Reducing GPU memory..."
     system_SetGpuMem 16
+    
+    system_Echo "Appending autostart commands..."
+    system_appendAutostartCommands
+
+    system_Echo "Creating Crons..."
+    system_createCrons
+    
+    system_Echo "Enabling I2C..."
+    system_enableI2C
+    
+    system_Echo "Setting user permissions..."
+    system_setPermissions
 }
