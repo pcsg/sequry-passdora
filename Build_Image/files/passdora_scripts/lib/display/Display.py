@@ -56,6 +56,14 @@ class Display:
             return False
         return True
 
+    def show_default(self, caller=None):
+        if not self.can_access(caller):
+            return False
+
+        from lib.autostart.ShowIP import ShowIP
+        ShowIP.show()
+        return True
+
     def clear(self, caller=None):
         if not self.can_access(caller):
             return False
