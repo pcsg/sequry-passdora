@@ -31,8 +31,8 @@ class Display:
         else:
             Display.__instance = self
 
-    def show(self, line1, line2):
-        if self.isLocked:
+    def show(self, line1, line2, caller=None):
+        if not self.can_access(caller):
             return False
 
         self.__LCD.display_string("--==| PASSDORA |==--", 0)
@@ -41,9 +41,18 @@ class Display:
         self.__LCD.display_string("--------------------", 3)
         return True
 
-    def clear(self):
+    def can_access(self, caller):
+        if self.__isLocked and caller is not self.__lockingObject:
+            return False
+        return True
+
+    def clear(self, caller=None):
+        if not self.can_access(caller):
+            return False
+
         self.__LCD.clear()
         self.show("", "")
+        return True
 
     def lock(self, locker):
         if self.__isLocked:
