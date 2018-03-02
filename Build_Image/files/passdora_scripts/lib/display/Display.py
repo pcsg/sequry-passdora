@@ -36,9 +36,19 @@ class Display:
             return False
 
         self.__LCD.display_string("--==| PASSDORA |==--", 0)
-        self.__LCD.display_string("|{0}|".format(line1.center(18)), 1)
-        self.__LCD.display_string("|{0}|".format(line2.center(18)), 2)
+        self.show_on_line(1, line1, caller)
+        self.show_on_line(2, line2, caller)
         self.__LCD.display_string("--------------------", 3)
+        return True
+
+    def show_on_line(self, line, text, caller=None):
+        if not self.can_access(caller):
+            return False
+
+        if (line is not 1) and (line is not 2):
+            raise Exception("Can't write to line " + line)
+
+        self.__LCD.display_string("|{0}|".format(text.center(18)), line)
         return True
 
     def can_access(self, caller):
