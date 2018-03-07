@@ -1,0 +1,4 @@
+# Has to be moved to /etc/udev/rules.d
+
+ACTION=="add", KERNEL=="sd[a-z][0-9]", TAG+="systemd", ENV{SYSTEMD_WANTS}="usbstick-handler@%k"
+
