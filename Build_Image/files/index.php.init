@@ -68,6 +68,8 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
             margin: 0;
             padding: 0;
 
+            text-align: center;
+
             font-family: 'Open Sans', sans-serif;
             font-size: 16px;
             color: #444;
@@ -97,7 +99,6 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
             width: 100%;
             height: 100%;
             font-size: 1.5em;
-            text-align: center;
             transition: visibility 0s, opacity 0.5s linear;
         }
 
@@ -112,7 +113,6 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
         }
 
         header {
-            text-align: center;
             background-color: #ececec;
             margin-bottom: 60px;
         }
@@ -123,7 +123,6 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
         }
 
         #welcome {
-            text-align: center;
             width: 600px;
             margin: 0 auto 30px auto;
             line-height: 2em;
@@ -141,7 +140,6 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
         .password-section {
             width: 550px;
             height: 175px;
-            text-align: center;
             margin: 0 auto 30px auto;
         }
 
@@ -149,7 +147,7 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
             height: 100px;
         }
 
-        .password-section input {
+        input {
             height: 50px;
             width: 300px;
             float: left;
@@ -182,7 +180,7 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
             margin-bottom: 20px;
         }
 
-        .password-section .pw-data-label {
+        .pw-data-label {
             width: 50px;
             height: 50px;
             color: white;
@@ -202,10 +200,9 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
         }
 
         #buttons {
-            text-align: center;
         }
 
-        #buttons button {
+        button {
             width: 400px;
             height: 50px;
 
@@ -222,20 +219,19 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
             cursor: pointer;
         }
 
-        #buttons button[disabled],
-        #buttons button.primary[disabled] {
+        button[disabled],
+        button.primary[disabled] {
             background-color: #E0E0E0;
             color: #444444;
             cursor: progress;
         }
 
-        #buttons button.primary {
+        button.primary {
             color: white;
             background: #65A644;
         }
 
         #note {
-            text-align: center;
             width: 600px;
             margin: 0 auto 65px auto;
 
@@ -309,25 +305,33 @@ if (!isset($_REQUEST['auth_code'])) {
     exec("python3 passdora_scripts/init_system.py show_code {$authCode}", $output, $result);
 
     echo "
-        <h2>Please enter the code displayed on the Passdora box:</h2>
+        <h2>Please enter the code shown on the Passdora box:</h2>
         <form action='/index.php' method='get'>
-            <input type='text' name='auth_code'>
-            <input type='submit' value='Submit'>
+            <div class='pw-data-row'>
+                <div class='pw-data-label'>
+                    <label for='auth_code' class='fa fa-key fa-lg'></label>
+                </div>
+                <input type='text' name='auth_code'>
+            </div>
+            <button type='submit'>Submit</button>
         </form>    
     ";
-
     exit;
 }
 
 if (isset($_REQUEST['auth_code']) && $_REQUEST['auth_code'] != $_SESSION['auth_code']) {
     echo "
-        <h2>Invalid authentication code.</h2>
+        <div id='note'>
+            <i id='note-icon' class='fa fa-exclamation-triangle fa-3x'></i>
+            <div id='note-text'>
+                <h3>Invalid authentication code submitted.</h3>
+            </div>
+        </div>
         <form action='/index.php' method='get'>
             <input type='hidden' name='reset_code' value='1'>
-            <input type='submit' value='Reset Code'>
+            <button type='submit'>Reset Code</button>
         </form>  
     ";
-
     exit;
 }
 ?>
