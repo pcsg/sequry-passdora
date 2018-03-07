@@ -37,7 +37,7 @@ GPIO.setup(BUTTON_GPIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 scriptStartTime = time.time()
 
-print "Press and hold the button for {0} seconds to verify".format(BUTTON_PRESS_TIME)
+print("Press and hold the button for {0} seconds to verify".format(BUTTON_PRESS_TIME))
 
 while True:
 
@@ -48,7 +48,7 @@ while True:
 
     while GPIO.input(BUTTON_GPIO_PIN) == False and buttonPressedTime < BUTTON_PRESS_TIME:
         if not buttonWasPressed:
-            print "Button pressed. Hold for {0} seconds to verify...".format(BUTTON_PRESS_TIME)
+            print("Button pressed. Hold for {0} seconds to verify...".format(BUTTON_PRESS_TIME))
     
         buttonWasPressed = True
         buttonPressedTime = time.time() - startTime
@@ -56,14 +56,14 @@ while True:
 
     if buttonWasPressed:
         if buttonPressedTime > BUTTON_PRESS_TIME:
-    	    print 'Verified'
-    	    sys.exit(0)
+            print('Verified')
+            sys.exit(0)
         else:
-	        print 'Button was not pressed long enough'
-	        sys.exit(3)
-	        
+            print('Button was not pressed long enough')
+            sys.exit(3)
+
     if time.time() - scriptStartTime > SCRIPT_TIMEOUT:
-        print 'No interaction'
+        print('No interaction')
         sys.exit(4)
         
     time.sleep(SLEEP_TIME)
