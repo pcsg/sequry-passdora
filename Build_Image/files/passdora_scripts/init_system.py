@@ -20,7 +20,7 @@ from lib.display.Display import Display
 
 
 # How many seconds has the button to be pressed
-BUTTON_PRESS_TIME = 3
+BUTTON_HOLD_TIME = 3
 
 # How many seconds to sleep between while iterations?
 SLEEP_TIME = 0.1
@@ -32,8 +32,13 @@ SCRIPT_TIMEOUT = 30
 BUTTON_GPIO_PIN = 18
 
 
+display = Display.get_instance()
+
+self = object()
+
 if "show_code" == sys.argv[1]:
-    Display.get_instance().show("Code:", sys.argv[2])
+    display.lock(self)
+    display.show("Code:", sys.argv[2], self)
     exit(0)
 
 
@@ -43,33 +48,50 @@ if "init" == sys.argv[1]:
 
     scriptStartTime = time.time()
 
-    print("Press and hold the button for {0} seconds to verify".format(BUTTON_PRESS_TIME))
+    print("Press and hold the button for {0} seconds to authenticate".format(BUTTON_HOLD_TIME))
+    display.show("Hold button for", "{0} seconds".format(BUTTON_HOLD_TIME), self)
+
+    button_was_pressed = False
+    button_held_time = 0
 
     while True:
+        start_time = time.time()
 
-        buttonWasPressed = False
-        buttonPressedTime = 0
+        while not GPIO.input(BUTTON_GPIO_PIN):
+            if not button_was_pressed:
+                print("Button pressed. Hold for {0} seconds to authenticate...".format(BUTTON_HOLD_TIME))
+                display.show_countdown(2, BUTTON_HOLD_TIME, "{0} seconds", self)
 
-        startTime = time.time()
+            if button_held_time >= BUTTON_HOLD_TIME:
+                display.hide_countdown(self)
 
-        while not GPIO.input(BUTTON_GPIO_PIN) and buttonPressedTime < BUTTON_PRESS_TIME:
-            if not buttonWasPressed:
-                print("Button pressed. Hold for {0} seconds to verify...".format(BUTTON_PRESS_TIME))
+                print("Release button to complete authentication")
+                display.show("Release button to", "finish auth", self)
 
-            buttonWasPressed = True
-            buttonPressedTime = time.time() - startTime
+                # Wait until button is released
+                while not GPIO.input(BUTTON_GPIO_PIN):
+                    pass
+                break
+
+            button_was_pressed = True
+            button_held_time = time.time() - start_time
             time.sleep(SLEEP_TIME)
 
-        if buttonWasPressed:
-            if buttonPressedTime > BUTTON_PRESS_TIME:
-                print('Verified')
+        if button_was_pressed:
+            display.hide_countdown(self)
+
+            if button_held_time > BUTTON_HOLD_TIME:
+                print('Authentication successful')
+                display.show("Authentication", "successful", self)
                 sys.exit(0)
             else:
                 print('Button was not pressed long enough')
+                display.show("Button released", "too soon", self)
                 sys.exit(3)
 
         if time.time() - scriptStartTime > SCRIPT_TIMEOUT:
             print('No interaction')
+            display.show("Aborting", "no interaction", self)
             sys.exit(4)
 
         time.sleep(SLEEP_TIME)
