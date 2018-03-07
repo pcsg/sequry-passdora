@@ -22,6 +22,7 @@ class Display:
     __LCD = lcd()  # type: lcd
 
     __isLoaderShowing = False  # type: bool
+    __isCountdownShowing = False  # type: bool
 
     @staticmethod
     def get_instance():
@@ -172,6 +173,63 @@ class Display:
             return False
 
         self.__isLoaderShowing = False
+        return True
+
+    def show_countdown(self, line, seconds, text, caller=None):
+        """
+        Shows a countdown on a given line of the display
+
+        :param int line: the line to display the countdown on
+        :param int seconds: how many seconds the countdown should count down
+        :param str text: additional text to display, "{0}" in the text will be replaced by current countdown value
+        :param object caller: the object calling this function (required to check if it is allowed to manipulate the display)
+
+        :return: Returns true if the countdown was displayed, returns false if the display was locked
+        :rtype: bool
+        """
+        if not self.can_access(caller):
+            return False
+
+        self.__isCountdownShowing = True
+
+        # Start a new thread with the function printing to the screen
+        threading.Thread(target=self.__countdown_threaded_function, args=(line, seconds, text, caller)).start()
+
+        return True
+
+    def __countdown_threaded_function(self, line, seconds, text, caller):
+        """
+        Private function that is started in a separate thread.
+        Prints the countdown to the display.
+        Runs in a separate thread to be asynchronous since it's using sleep
+
+        :param int line: the line the countdown text should be displayed on
+        :param object caller: the object that called the show_countdown function (required to check if it is allowed to manipulate the display)
+
+        :return: Returns nothing
+        :rtype: None
+        """
+        for second in range(seconds, 0, -1):
+            if not self.__isCountdownShowing:
+                break
+            print(text.format(second))
+            self.show_on_line(line, text.format(second), caller)
+            time.sleep(1)
+        self.hide_countdown(caller)
+
+    def hide_countdown(self, caller=None):
+        """
+        Hides the active countdown
+
+        :param object caller: the object calling this function (required to check if it is allowed to manipulate the display)
+
+        :return: Returns true if the countdwon was successfully hidden, returns false if the display was locked
+        :rtype: bool
+        """
+        if not self.can_access(caller):
+            return False
+
+        self.__isCountdownShowing = False
         return True
 
     def clear(self, caller=None):
