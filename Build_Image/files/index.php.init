@@ -377,7 +377,7 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
             <button id="printButton"><i class="fa fa-print"></i> Print</button>
         </p>
         <p>
-            <button id="confirmButton" class="primary"
+            <button id="confirmButton" class="primary" disabled
                     title="Make sure you read the notice above and stored the passwords"><i class="fa fa-check"></i>
                 Confirm
             </button>
