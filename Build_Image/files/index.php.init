@@ -1,25 +1,35 @@
 <?php
 
 /***************************************************************************************
-*                                                                                      *
-* Initialization page displaying all necessary passwords to the user.                  *
-* When the user confirms this page the page replaces itself with the QUIQQER index.php *
-*                                                                                      *
-* Author: Jan Wennrich (PCSG)                                                          *
-*                                                                                      *
-***************************************************************************************/
+ *                                                                                      *
+ * Initialization page displaying all necessary passwords to the user.                  *
+ * When the user confirms this page the page replaces itself with the QUIQQER index.php *
+ *                                                                                      *
+ * Author: Jan Wennrich (PCSG)                                                          *
+ *                                                                                      *
+ ***************************************************************************************/
 
-if (isset($_GET['confirming'])) {
+session_start();
 
+if (isset($_REQUEST['reset_code'])) {
+    session_destroy();
+    session_start();
+}
+
+
+if (isset($_SESSION['auth_code']) &&
+    $_REQUEST['auth_code'] != $_SESSION['auth_code'] &&
+    isset($_GET['confirming'])
+) {
     $cmdOutput = "";
     $cmdReturnValue = -1;
-    
-    exec("python passdora_scripts/button.py", $cmdOutput, $cmdReturnValue);
-    
+
+    exec("python3 passdora_scripts/init_system.py init", $cmdOutput, $cmdReturnValue);
+
     echo json_encode(
-        array(            
+        array(
             'returnCode' => $cmdReturnValue,
-            'output' => $cmdOutput  
+            'output' => $cmdOutput
         )
     );
 
@@ -51,7 +61,7 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
     <link rel="stylesheet" href="/packages/bin/font-awesome/css/font-awesome.min.css">
 
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,800' rel='stylesheet' type='text/css'>
-<!--    <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>-->
+    <!--    <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>-->
 
     <style>
         body {
@@ -90,7 +100,7 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
             text-align: center;
             transition: visibility 0s, opacity 0.5s linear;
         }
-        
+
         #loader-overlay.hidden {
             visibility: hidden;
             opacity: 0;
@@ -269,7 +279,6 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
     </style>
 </head>
 <body>
-
 <div id="loader-overlay" class="hidden">
     <i id="loader-overlay-icon" class="fa fa-circle-o-notch fa-spin fa-5x"></i>
     <!--<span class="fa-stack fa-lg fa-3x">
@@ -288,6 +297,40 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
     <h1>Welcome to Passdora!</h1>
 </div>
 
+<?php
+if (!isset($_SESSION['auth_code'])) {
+    $authCode              = rand(10000, 99999);
+
+    $_SESSION['auth_code'] = $authCode;
+
+    $output = "none";
+    $result = "-1";
+
+    exec("python3 passdora_scripts/init_system.py show_code {$authCode}", $output, $result);
+
+    echo "
+        <h2>Please enter the code displayed on the Passdora box:</h2>
+        <form action='/index.php' method='get'>
+            <input type='text' name='auth_code'>
+            <input type='submit' value='Submit'>
+        </form>    
+    ";
+
+    exit;
+}
+
+if ($_REQUEST['auth_code'] != $_SESSION['auth_code']) {
+    echo "
+        <h2>Invalid authentication code.</h2>
+        <form action='/index.php' method='get'>
+            <input type='hidden' name='reset_code' value='1'>
+            <input type='submit' value='Reset Code'>
+        </form>  
+    ";
+
+    exit;
+}
+?>
 
 <div id="note">
     <i id="note-icon" class="fa fa-exclamation-triangle fa-3x"></i>
@@ -437,45 +480,45 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
             handleCountdownZero();
         }
     }, 1000);
-    
-    
+
+
     var showLoaderOverlay = function(message) {
-        document.getElementById('loader-overlay-text').innerHTML = message;     
+        document.getElementById('loader-overlay-text').innerHTML = message;
         document.getElementById('loader-overlay').className = '';
-    }
-    
+    };
+
     var hideLoaderOverlay = function(message) {
         document.getElementById('loader-overlay').className = 'hidden';
-    }
-    
+    };
+
     var loaderOverlayShowIcon = function (icon) {
         var OverlayIcon = document.getElementById('loader-overlay-icon');
-        OverlayIcon.className = "fa fa-5x " + icon; 
-    }
+        OverlayIcon.className = "fa fa-5x " + icon;
+    };
 
     var loaderOverlayShowSuccess = function() {
-       loaderOverlayShowIcon("fa-check");
-    }
-      
+        loaderOverlayShowIcon("fa-check");
+    };
+
     var loaderOverlayShowError = function() {
-       loaderOverlayShowIcon("fa-close"); 
-    }
-    
+        loaderOverlayShowIcon("fa-close");
+    };
+
     var loaderOverlayResetIcon = function(instantly) {
-        var timeout = instantly ? 0 : 2000;        
+        var timeout = instantly ? 0 : 2000;
         window.setTimeout(function () {
-           document.getElementById('loader-overlay-icon').className = "fa fa-circle-o-notch fa-spin fa-5x"
+            document.getElementById('loader-overlay-icon').className = "fa fa-circle-o-notch fa-spin fa-5x"
         }, timeout)
-    }
-    
+    };
+
     var confirmPasswordsCopied = function() {
         return confirm('Did you really save all passwords?\nThe passwords can not be displayed again.\nIf you lose them your data can not be recovered!')
-    }
-    
+    };
+
     var confirmButtonPressMessage = function() {
         return confirm('Make sure you can physically access your Passdora box.\nAfter confirming this dialog you have 30 seconds to confirm the initialization by pressing and holding the button on your box for 3 seconds.')
-    }
-    
+    };
+
     var handleAuthSuccessful = function() {
         loaderOverlayShowSuccess();
         showLoaderOverlay('Authentication successful!');
@@ -487,8 +530,8 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
                 location.reload(true);
             }, 3000)
         }, 2000);
-    }
-    
+    };
+
     var handleAuthError = function(message) {
         showLoaderOverlay(message);
         loaderOverlayShowError();
@@ -497,30 +540,30 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
             hideLoaderOverlay();
             loaderOverlayResetIcon(true);
         }, 50)
-    }
-    
+    };
+
     var handleAfterPrint = function(event) {
         enableConfirmButton();
-    }
-    
+    };
+
     var handleCountdownZero = function() {
         enableConfirmButton();
         clearInterval(ConfirmInterval);
-    }
-    
+    };
+
     var enableConfirmButton = function() {
         ConfirmButton.innerHTML = '<i class="fa fa-check"></i> Confirm';
         ConfirmButton.disabled = false;
-    }
-    
+    };
+
     var handleConfirmButtonClick = function() {
         if (confirmPasswordsCopied() && confirmButtonPressMessage()) {
             var XHttp = new XMLHttpRequest();
 
             XHttp.onreadystatechange = function () {
                 if (this.readyState === 4) {
-                    if (this.status === 200) {                        
-                        var Response = JSON.parse(XHttp.response);                        
+                    if (this.status === 200) {
+                        var Response = JSON.parse(XHttp.response);
                         switch(Response.returnCode) {
                             case 0:
                                 handleAuthSuccessful();
@@ -541,7 +584,7 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
                     }
                 }
             };
-            
+
             showLoaderOverlay('Awaiting button press for authentication...');
             XHttp.open("POST", "/index.php?confirming=1", true);
             XHttp.send("confirmed=1");

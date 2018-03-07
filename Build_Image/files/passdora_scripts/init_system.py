@@ -16,6 +16,7 @@
 import RPi.GPIO as GPIO
 import sys
 import time
+from lib.display.Display import Display
 
 
 # How many seconds has the button to be pressed
@@ -31,40 +32,44 @@ SCRIPT_TIMEOUT = 30
 BUTTON_GPIO_PIN = 18
 
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(BUTTON_GPIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+if "show_code" == sys.argv[1]:
+    Display.get_instance().show("Code:", sys.argv[2])
+    exit(0)
 
 
-scriptStartTime = time.time()
+if "init" == sys.argv[1]:
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(BUTTON_GPIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-print("Press and hold the button for {0} seconds to verify".format(BUTTON_PRESS_TIME))
+    scriptStartTime = time.time()
 
-while True:
+    print("Press and hold the button for {0} seconds to verify".format(BUTTON_PRESS_TIME))
 
-    buttonWasPressed = False
-    buttonPressedTime = 0
-    
-    startTime = time.time()
+    while True:
 
-    while not GPIO.input(BUTTON_GPIO_PIN) and buttonPressedTime < BUTTON_PRESS_TIME:
-        if not buttonWasPressed:
-            print("Button pressed. Hold for {0} seconds to verify...".format(BUTTON_PRESS_TIME))
-    
-        buttonWasPressed = True
-        buttonPressedTime = time.time() - startTime
+        buttonWasPressed = False
+        buttonPressedTime = 0
+
+        startTime = time.time()
+
+        while not GPIO.input(BUTTON_GPIO_PIN) and buttonPressedTime < BUTTON_PRESS_TIME:
+            if not buttonWasPressed:
+                print("Button pressed. Hold for {0} seconds to verify...".format(BUTTON_PRESS_TIME))
+
+            buttonWasPressed = True
+            buttonPressedTime = time.time() - startTime
+            time.sleep(SLEEP_TIME)
+
+        if buttonWasPressed:
+            if buttonPressedTime > BUTTON_PRESS_TIME:
+                print('Verified')
+                sys.exit(0)
+            else:
+                print('Button was not pressed long enough')
+                sys.exit(3)
+
+        if time.time() - scriptStartTime > SCRIPT_TIMEOUT:
+            print('No interaction')
+            sys.exit(4)
+
         time.sleep(SLEEP_TIME)
-
-    if buttonWasPressed:
-        if buttonPressedTime > BUTTON_PRESS_TIME:
-            print('Verified')
-            sys.exit(0)
-        else:
-            print('Button was not pressed long enough')
-            sys.exit(3)
-
-    if time.time() - scriptStartTime > SCRIPT_TIMEOUT:
-        print('No interaction')
-        sys.exit(4)
-        
-    time.sleep(SLEEP_TIME)
-
