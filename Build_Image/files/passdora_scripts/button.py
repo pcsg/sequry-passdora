@@ -1,4 +1,4 @@
-'''
+"""
 ###################################################################################################
 #                                                                                                 #
 # Waits for a button press which lasts over a defined duration on GPIO pin 18 (pulling pin down). #
@@ -11,7 +11,7 @@
 # Author: Jan Wennrich (PCSG)                                                                     #
 #                                                                                                 #
 ###################################################################################################
-'''
+"""
 
 import RPi.GPIO as GPIO
 import sys
