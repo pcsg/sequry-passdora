@@ -298,7 +298,7 @@ define("PASSDORA_LOGO", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACwUAAAEnC
 </div>
 
 <?php
-if (!isset($_SESSION['auth_code'])) {
+if (!isset($_REQUEST['auth_code'])) {
     $authCode              = rand(10000, 99999);
 
     $_SESSION['auth_code'] = $authCode;
@@ -319,7 +319,7 @@ if (!isset($_SESSION['auth_code'])) {
     exit;
 }
 
-if ($_REQUEST['auth_code'] != $_SESSION['auth_code']) {
+if (isset($_REQUEST['auth_code']) && $_REQUEST['auth_code'] != $_SESSION['auth_code']) {
     echo "
         <h2>Invalid authentication code.</h2>
         <form action='/index.php' method='get'>
