@@ -74,6 +74,7 @@ function system_enableI2C() {
 
 function system_setPermissions() {
     sudo adduser www-data gpio
+    sudo adduser www-data i2c
 }
 
 
