@@ -59,7 +59,7 @@ sudo rm -rf ${TEMP_BACKUP_FOLDER}
 
 
 # If USB-device is connected...
-if [ mountpoint -q ${USB_MOUNTING_POINT} ]; then
+if mountpoint -q ${USB_MOUNTING_POINT}; then
 
     echo "Copying backup to USB-drive..."
 
