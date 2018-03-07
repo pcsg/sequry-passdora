@@ -46,7 +46,7 @@ while True:
     
     startTime = time.time()
 
-    while GPIO.input(BUTTON_GPIO_PIN) == False and buttonPressedTime < BUTTON_PRESS_TIME:
+    while not GPIO.input(BUTTON_GPIO_PIN) and buttonPressedTime < BUTTON_PRESS_TIME:
         if not buttonWasPressed:
             print("Button pressed. Hold for {0} seconds to verify...".format(BUTTON_PRESS_TIME))
     
