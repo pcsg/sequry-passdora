@@ -18,8 +18,8 @@ if (isset($_REQUEST['reset_code'])) {
 
 
 if (isset($_SESSION['auth_code']) &&
-    $_REQUEST['auth_code'] != $_SESSION['auth_code'] &&
-    isset($_GET['confirming'])
+    $_REQUEST['auth_code'] == $_SESSION['auth_code'] &&
+    isset($_REQUEST['confirming'])
 ) {
     $cmdOutput = "";
     $cmdReturnValue = -1;
