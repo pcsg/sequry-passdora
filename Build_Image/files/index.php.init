@@ -592,7 +592,8 @@ if (isset($_REQUEST['auth_code']) && $_REQUEST['auth_code'] != $_SESSION['auth_c
             };
 
             showLoaderOverlay('Awaiting button press for authentication...');
-            XHttp.open("POST", "/index.php?confirming=1", true);
+            var authCodeParamAndValue = window.location.search.substr(1);
+            XHttp.open("POST", "/index.php?confirming=1&"+authCodeParamAndValue, true);
             XHttp.send("confirmed=1");
         }
     }
