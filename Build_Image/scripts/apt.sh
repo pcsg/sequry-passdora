@@ -40,7 +40,7 @@ function apt_FullUpgrade() {
 
 # Installs all dependencies
 function apt_InstallPackages() {
-    sudo apt install ssl-cert nginx mysql-server php-fpm php-curl php-dom php-mbstring php-xml php-zip php-imagick php-gd php-mysql php-bcmath php-dev libsodium-dev php-libsodium python-smbus i2c-tools -y
+    sudo apt install ssl-cert nginx mysql-server php-fpm php-curl php-dom php-mbstring php-xml php-zip php-imagick php-gd php-mysql php-bcmath php-dev libsodium-dev php-libsodium python3-smbus python3-rpi.gpio i2c-tools pmount -y
 }
 
     

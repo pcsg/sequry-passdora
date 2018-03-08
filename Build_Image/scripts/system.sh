@@ -46,6 +46,21 @@ function system_appendAutostartCommands() {
 }
 
 
+# Copies scripts to enable automatic mounting of plugged in usb sticks
+# See: https://raspberrypi.stackexchange.com/a/66324
+function system_setupUsbAutomount() {
+    # Udev rule
+    sudo cp files/usb_automount/usbstick.rules /etc/udev/rules.d/usbstick.rules
+
+    # Systemd service
+    sudo cp files/usbstick-handler@.service /lib/systemd/usbstick-handler@.service
+
+    # Mount script
+    sudo cp files/cpmount /usr/local/bin/automount
+    sudo chmod +x /usr/local/bin/cpmount
+}
+
+
 function system_createCrons() {
     sudo ln -s /var/www/html/passdora_scripts/backup.sh /etc/cron.daily/backup.sh
 }
@@ -59,6 +74,7 @@ function system_enableI2C() {
 
 function system_setPermissions() {
     sudo adduser www-data gpio
+    sudo adduser www-data i2c
 }
 
 
@@ -72,6 +88,9 @@ function system_ExecuteStep() {
     
     system_Echo "Appending autostart commands..."
     system_appendAutostartCommands
+
+    system_Echo "Setting up USB auto-mount..."
+    system_setupUsbAutomount
 
     system_Echo "Creating Crons..."
     system_createCrons
