@@ -35,7 +35,7 @@ if (isset($_SESSION['auth_code']) &&
 
     if ($cmdReturnValue == 0) {
         // Delete password file
-        unlink('./passdora_passwords.ini');
+        unlink('./etc/passdora_passwords.ini.php');
 
         // Enable QUIQQER index.php
         rename('./index.php', './index.php.init');
