@@ -33,12 +33,14 @@ if (isset($_SESSION['auth_code']) &&
         )
     );
 
-    // Delete password file
-    unlink('./passdora_passwords.ini');
+    if ($cmdReturnValue == 0) {
+        // Delete password file
+        unlink('./passdora_passwords.ini');
 
-    // Enable QUIQQER index.php
-    rename('./index.php', './index.php.init');
-    rename('./index.php.quiqqer', './index.php');
+        // Enable QUIQQER index.php
+        rename('./index.php', './index.php.init');
+        rename('./index.php.quiqqer', './index.php');
+    }
 
     exit;
 }
