@@ -36,7 +36,21 @@ display = Display.get_instance()
 
 self = object()
 
+
+try:
+    selected_option = sys.argv[1]
+except IndexError:
+    print("You need to specify an option. Valid options: show_code, init")
+    exit(1)
+
+
 if "show_code" == sys.argv[1]:
+    try:
+        code = sys.argv[2]
+    except IndexError:
+        print("You need to specify a code to display.")
+        exit(1)
+
     display.lock(self)
     display.show("Code:", sys.argv[2], self)
     exit(0)
