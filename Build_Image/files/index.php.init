@@ -323,12 +323,12 @@ if (!isset($_REQUEST['auth_code'])) {
 
 if (isset($_REQUEST['auth_code']) && $_REQUEST['auth_code'] != $_SESSION['auth_code']) {
     echo "
-        <div id='note'>
-            <i id='note-icon' class='fa fa-exclamation-triangle fa-3x'></i>
-            <div id='note-text'>
-                <h3>Invalid authentication code submitted.</h3>
-            </div>
-        </div>
+<div id='note'>
+    <i id='note-icon' class='fa fa-exclamation-triangle fa-3x'></i>
+    <div id='note-text'>
+<h3>Invalid authentication code submitted.</h3>
+    </div>
+</div>
         <form action='/index.php' method='get'>
             <input type='hidden' name='reset_code' value='1'>
             <button type='submit'>Reset Code</button>
