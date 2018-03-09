@@ -1,3 +1,4 @@
+#!/bin/sh
 #########################################################################
 #                                                                       #
 # Script that copies a zipped raspbian image to a sd card.              #
