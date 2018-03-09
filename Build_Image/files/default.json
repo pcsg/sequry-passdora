@@ -12,10 +12,7 @@
     "start_layout": "layout\/startPage",
     "default_layout": "layout\/noSidebar"
   },
-  "packages": {
-    "sequry\/passdora": "dev-master",
-    "sequry\/core": "dev-master"
-  },
+  "packages": {},
   "meta": {
     "name": {
       "en_EN": "Passdora",
