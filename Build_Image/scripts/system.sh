@@ -64,7 +64,7 @@ function system_setupUsbAutomount() {
 function system_createCrons() {
 #    sudo ln -s /var/www/html/passdora_scripts/backup.sh /etc/cron.daily/backup.sh
     # Run backup-check script every hour
-    echo "0 * * * * root sudo php /var/www/html/passdora_scripts/cron_backup.php" | sudo tee /etc/cron.d/backup
+    echo "0 * * * * root sudo php /var/www/html/passdora_scripts/cron_backup.php" | sudo tee /etc/cron.d/backup > /dev/null
 }
 
 
