@@ -53,11 +53,11 @@ function system_setupUsbAutomount() {
     sudo cp files/usb_automount/usbstick.rules /etc/udev/rules.d/usbstick.rules
 
     # Systemd service
-    sudo cp files/usbstick-handler@.service /lib/systemd/usbstick-handler@.service
+    sudo cp files/usb_automount/usbstick-handler@.service /lib/systemd/usbstick-handler@.service
 
     # Mount script
-    sudo cp files/cpmount /usr/local/bin/automount
-    sudo chmod +x /usr/local/bin/cpmount
+    sudo cp files/usb_automount/automount /usr/local/bin/automount
+    sudo chmod +x /usr/local/bin/automount
 }
 
 
