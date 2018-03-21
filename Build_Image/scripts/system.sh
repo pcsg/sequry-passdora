@@ -42,7 +42,7 @@ function system_RestartWebserverComponents() {
 
 
 function system_appendAutostartCommands() {
-    sudo sed -i "s/^exit 0/sudo python \/var\/www\/html\/passdora_scripts\/script_loader.py\n\nexit 0/g" /etc/rc.local
+    sudo sed -i "s/^exit 0/sudo python3 \/var\/www\/html\/passdora_scripts\/script_loader.py\n\nexit 0/g" /etc/rc.local
 }
 
 
