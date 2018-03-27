@@ -22,9 +22,7 @@ class RestoreListener(AbstractAutostart):
             self.display.lock(self)
 
             # TODO: Confirm backup with a button press
-            input("Start restore process by pressing enter, this can not be undone!")
-            input("Press enter if you really want to start the restore process.")
-            print("restore requested")
+            print("Processing System-Restore...")
 
             self.display.show("", "", self)
             self.display.show_loader(2, self)
