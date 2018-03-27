@@ -1,3 +1,4 @@
+#!/bin/sh
 #########################################################################
 #                                                                       #
 # Script that copies a zipped raspbian image to a sd card.              #
@@ -63,12 +64,11 @@ case $CHOICE in
 	    ;;
     y|Y)
 	    echo "Writing image \"\033[0;32m$IMAGE_ZIP\033[0m\" to \"\033[0;32m$DEVICE\033[0m\"..."
-	    unzip -p $IMAGE_ZIP | sudo dd of=$DEVICE bs=4M status=progress conv=fsync
+	    unzip -p $IMAGE_ZIP | sudo dd of=$DEVICE bs=4M status=progress
 	    ;;
 esac
     
-    
-# Check if assumed boot partition is found where expected  
+# Check if assumed boot partition is found where expected
 if [ -d $BOOT_PATH ]; then
     # Ask if this is really the correct boot partition
     printf "Do you want to create the file \"\033[0;32m$BOOT_PATH/ssh\033[0m\" to enable SSH? (y/n): "
@@ -89,7 +89,8 @@ else
     # Assumed boot partition could not be found
     echo "Created boot partition could not be found. Please manually create a file named \"\033[0;32mssh\033[0m\" on it to enable SSH."       
 fi
-  
+
+sync
 
 # Everything done
 echo "Everything done, exiting."

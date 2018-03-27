@@ -283,3 +283,34 @@ class Display:
             self.__lockingObject = None
         else:
             raise Exception("You're not permitted to unlock the display.")
+
+    def turn_off(self, caller=None):
+        """
+        Turns the display off
+
+        :param object caller: the object calling this function (required to check if it is allowed to manipulate the display)
+
+        :return: Returns true if the screen was successfully turned off, returns false if the screen was locked
+        :rtype: bool
+        """
+        if not self.can_access(caller):
+            return False
+
+        self.__LCD.display_off()
+        self.__LCD.backlight_off()
+        return True
+
+    def turn_on(self, caller=None):
+        """
+        Turns the display on
+
+        :param object caller: the object calling this function (required to check if it is allowed to manipulate the display)
+
+        :return: Returns true if the screen was successfully turned off, returns false if the screen was locked
+        :rtype: bool
+        """
+        if not self.can_access(caller):
+            return False
+
+        self.__LCD.display_on()
+        return True

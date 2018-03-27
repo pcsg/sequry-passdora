@@ -35,7 +35,7 @@ function quiqqer_CleanupSetup() {
 
 # Sets the html directory owner to wwww-data
 function quiqqer_SetDirPermissions() {
-    sudo chown -R www-data:www-data /var/www/html/
+    sudo chown -R www-data:www-data /var/www/
 }
 
 

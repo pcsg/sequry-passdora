@@ -43,21 +43,21 @@ mkdir -p ${TEMP_BACKUP_FOLDER}/system_etc
 
 # Dump database
 echo "Dumping database..."
-sudo mysqldump --databases quiqqer > ${TEMP_BACKUP_FOLDER}/database.sql
+sudo mysqldump --databases quiqqer mysql > ${TEMP_BACKUP_FOLDER}/database.sql
 
 # Copy QUIQQER etc/ folder
 echo "Copying QUIQQER etc/ folder..."
-sudo cp -r /var/www/html/etc/* ${TEMP_BACKUP_FOLDER}/quiqqer_etc
+sudo cp -a /var/www/html/etc/* ${TEMP_BACKUP_FOLDER}/quiqqer_etc
 
 # Copy system etc/ folder
 echo "Copying System etc/ folder..."
-sudo cp -r /etc/* ${TEMP_BACKUP_FOLDER}/system_etc
+sudo cp -a /etc/* ${TEMP_BACKUP_FOLDER}/system_etc
 
 # Tar everything in the temporary backup directory and then encrypt it
 (
     cd ${TEMP_BACKUP_FOLDER}
     echo "Packing everything into an encrypted archive..."
-    sudo tar -cz * | gpg -c --batch --yes --passphrase ${RESTORE_KEY} -o ${ENCRYPTED_BACKUP_FILE}
+    sudo tar -czp * | gpg -c --batch --yes --passphrase ${RESTORE_KEY} -o ${ENCRYPTED_BACKUP_FILE}
 )
 
 # Remove temp folder
