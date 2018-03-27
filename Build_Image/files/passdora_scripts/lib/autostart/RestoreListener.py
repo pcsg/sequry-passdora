@@ -62,6 +62,7 @@ class RestoreListener(AbstractAutostart):
 
             sleep(2)
 
+            self.display.turn_off(self)
             os.system("sudo shutdown now -r")
 
     def extract_files(self):
