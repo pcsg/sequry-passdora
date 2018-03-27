@@ -43,7 +43,7 @@ mkdir -p ${TEMP_BACKUP_FOLDER}/system_etc
 
 # Dump database
 echo "Dumping database..."
-sudo mysqldump --databases quiqqer > ${TEMP_BACKUP_FOLDER}/database.sql
+sudo mysqldump --databases quiqqer mysql > ${TEMP_BACKUP_FOLDER}/database.sql
 
 # Copy QUIQQER etc/ folder
 echo "Copying QUIQQER etc/ folder..."
