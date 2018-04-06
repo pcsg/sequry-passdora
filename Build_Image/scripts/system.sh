@@ -80,6 +80,15 @@ function system_setPermissions() {
 }
 
 
+# Imports the Passdora-Vendor GPG public key for www-data, pi and root user
+function system_importGpgKey() {
+    # TODO: load cert from an online source(?)
+    sudo gpg --import files/gpg.key
+    sudo -u pi gpg --import files/gpg.key
+    sudo -u www-data gpg --import files/gpg.key
+}
+
+
 # Executes the system setup steps in correct order
 function system_ExecuteStep() {
     system_Echo "Changing hostname..."
@@ -102,4 +111,7 @@ function system_ExecuteStep() {
     
     system_Echo "Setting user permissions..."
     system_setPermissions
+
+    system_Echo "Importing GPG key..."
+    system_importGpgKey
 }
