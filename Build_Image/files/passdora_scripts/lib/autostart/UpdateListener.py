@@ -24,13 +24,13 @@ class UpdateListener(AbstractAutostart):
 
     def run(self):
         if self.is_update_requested():
-            self.display.lock(self)
+            self.display.Lock.acquire()
 
             # TODO: Confirm update with a button press
             print("Processing System-Update...")
 
-            self.display.show("", "", self)
-            self.display.show_loader(2, self)
+            self.display.show("", "")
+            self.display.show_loader(2)
 
             print("Extracting files...")
             self.display.show_on_line(1, "Extracting files")
@@ -47,19 +47,19 @@ class UpdateListener(AbstractAutostart):
             # Set is_requested in config to zero and save the file
             self.set_is_requested(0)
 
-            self.display.hide_loader(self)
+            self.display.hide_loader()
             print("Update completed!")
-            self.display.show("Update", "Complete!", self)
+            self.display.show("Update", "Complete!")
 
             sleep(2)
 
             print("Restarting the system...")
-            self.display.show("Restarting", "", self)
-            self.display.show_loader(2, self)
+            self.display.show("Restarting", "")
+            self.display.show_loader(2)
 
             sleep(2)
 
-            self.display.turn_off(self)
+            self.display.turn_off()
             os.system("sudo shutdown now -r")
 
     def extract_files(self):

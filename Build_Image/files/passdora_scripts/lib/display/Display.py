@@ -9,6 +9,7 @@
 """
 import threading
 import time
+from threading import Lock
 
 from lib.display.lcddriver import lcd
 
@@ -23,6 +24,8 @@ class Display:
 
     __isLoaderShowing = False  # type: bool
     __isCountdownShowing = False  # type: bool
+
+    Lock = threading.Lock()  # type: Lock
 
     @staticmethod
     def get_instance():
@@ -41,108 +44,74 @@ class Display:
         else:
             Display.__instance = self
 
-    def show(self, line1, line2, caller=None):
+    def show(self, line1, line2):
         """
         Shows text on the display, overwriting everything on screen
 
         :param str line1: text to display on the first line
         :param str line2: text to display on the second line
-        :param object caller: the object calling this function (required to check if it is allowed to manipulate the display)
 
         :return: Returns true if the text was displayed, returns false if the display was locked
         :rtype: bool
         """
-        if not self.can_access(caller):
-            return False
-
         self.__LCD.display_string("--==| PASSDORA |==--", 0)
-        self.show_on_line(1, line1, caller)
-        self.show_on_line(2, line2, caller)
+        self.show_on_line(1, line1)
+        self.show_on_line(2, line2)
         self.__LCD.display_string("--------------------", 3)
-        return True
 
-    def show_on_line(self, line, text, caller=None):
+    def show_on_line(self, line, text):
         """
         Shows the given text on a given line of the display without overwriting the rest of the screen
 
         :param int line: the line to display the text on (can be 1 or 2)
         :param str text: the text to display
-        :param object caller: the object calling this function (required to check if it is allowed to manipulate the display)
 
         :raises Exception: throws exception if an invalid line is given
 
         :return: Returns true if the text was displayed, returns false if the display was locked
         :rtype: bool
         """
-        if not self.can_access(caller):
-            return False
-
         # Only allowed to print to line 1 and 2
         if (line is not 1) and (line is not 2):
             raise Exception("Can't write to line " + str(line))
 
         # Place "|" on left and right border, center text in between
         self.__LCD.display_string("|{0}|".format(text.center(18)), line)
-        return True
 
-    def can_access(self, caller):
-        """
-        Returns if a given object is allowed to access the display
-
-        :param object caller: the object that should be tested
-
-        :return: Returns true if the object is allowed to access the display or false if it isn't
-        :rtype: bool
-        """
-        if self.__isLocked and caller is not self.__lockingObject:
-            return False
-        return True
-
-    def show_default(self, caller=None):
+    def show_default(self):
         """
         Shows the displays default content
-
-        :param object caller: the object calling this function (required to check if it is allowed to manipulate the display)
 
         :return: Returns true if the default content was displayed, returns false if the display was locked
         :rtype: bool
         """
-        if not self.can_access(caller):
-            return False
-
         # Show hostname and IP
         from lib.autostart.ShowIP import ShowIP
         ShowIP.show()
-        return True
 
-    def show_loader(self, line, caller=None):
+    def show_loader(self, line):
         """
         Shows a loader on a given line of the display
 
         :param int line: the line to display the loader on
-        :param object caller: the object calling this function (required to check if it is allowed to manipulate the display)
 
         :return: Returns true if the loader was displayed, returns false if the display was locked
         :rtype: bool
         """
-        if not self.can_access(caller):
-            return False
-
         self.__isLoaderShowing = True
 
         # Start a new thread with the function printing to the screen
-        threading.Thread(target=self.__loader_thread_function, args=(line, caller)).start()
+        threading.Thread(target=self.__loader_thread_function, args=[line]).start()
 
         return True
 
-    def __loader_thread_function(self, line, caller):
+    def __loader_thread_function(self, line):
         """
         Private function that is started in a separate thread.
         Prints the loading text to the display.
         Runs in a separate thread to be asynchronous since it's using sleep
 
         :param int line: the line the loader text should be displayed on
-        :param object caller: the object that called the show_loader function (required to check if it is allowed to manipulate the display)
 
         :return: Returns nothing
         :rtype: None
@@ -157,54 +126,41 @@ class Display:
                 # Place spaces before and after the dot to move it from left to right
                 loader_text = " " * i + "." + " " * (3 - i)
 
-                self.show_on_line(line, loader_text, caller)
+                self.show_on_line(line, loader_text)
                 time.sleep(0.1)
 
-    def hide_loader(self, caller=None):
+    def hide_loader(self):
         """
         Hides the loader
-
-        :param object caller: the object calling this function (required to check if it is allowed to manipulate the display)
 
         :return: Returns true if loader was successfully hidden, returns false if the display was locked
         :rtype: bool
         """
-        if not self.can_access(caller):
-            return False
-
         self.__isLoaderShowing = False
-        return True
 
-    def show_countdown(self, line, seconds, text, caller=None):
+    def show_countdown(self, line, seconds, text):
         """
         Shows a countdown on a given line of the display
 
         :param int line: the line to display the countdown on
         :param int seconds: how many seconds the countdown should count down
         :param str text: additional text to display, "{0}" in the text will be replaced by current countdown value
-        :param object caller: the object calling this function (required to check if it is allowed to manipulate the display)
 
         :return: Returns true if the countdown was displayed, returns false if the display was locked
         :rtype: bool
         """
-        if not self.can_access(caller):
-            return False
-
         self.__isCountdownShowing = True
 
         # Start a new thread with the function printing to the screen
-        threading.Thread(target=self.__countdown_threaded_function, args=(line, seconds, text, caller)).start()
+        threading.Thread(target=self.__countdown_threaded_function, args=(line, seconds, text)).start()
 
-        return True
-
-    def __countdown_threaded_function(self, line, seconds, text, caller):
+    def __countdown_threaded_function(self, line, seconds, text):
         """
         Private function that is started in a separate thread.
         Prints the countdown to the display.
         Runs in a separate thread to be asynchronous since it's using sleep
 
         :param int line: the line the countdown text should be displayed on
-        :param object caller: the object that called the show_countdown function (required to check if it is allowed to manipulate the display)
 
         :return: Returns nothing
         :rtype: None
@@ -213,11 +169,11 @@ class Display:
             if not self.__isCountdownShowing:
                 break
             print(text.format(second))
-            self.show_on_line(line, text.format(second), caller)
+            self.show_on_line(line, text.format(second))
             time.sleep(1)
-        self.hide_countdown(caller)
+        self.hide_countdown()
 
-    def hide_countdown(self, caller=None):
+    def hide_countdown(self):
         """
         Hides the active countdown
 
@@ -226,65 +182,19 @@ class Display:
         :return: Returns true if the countdwon was successfully hidden, returns false if the display was locked
         :rtype: bool
         """
-        if not self.can_access(caller):
-            return False
-
         self.__isCountdownShowing = False
-        return True
 
-    def clear(self, caller=None):
+    def clear(self):
         """
         Clears the display. Leaving only the Passdora-text and frame
 
         :param object caller: the object calling this function (required to check if it is allowed to manipulate the display)
         :return: Returns true if the display was successfully cleared, returns false if the display was locked
         """
-        if not self.can_access(caller):
-            return False
-
         self.__LCD.clear()
         self.show("", "")
-        return True
 
-    def lock(self, locker):
-        """
-        Locks the screen for a given object.
-        This means that only the given object can manipulate the display until the object unlocks the display again.
-        This is useful if a script needs to show something on the display without background scripts overwriting it.
-
-        :param object locker: The object trying to lock the screen
-
-        :return: Returns true if the screen was successfully locked, returns false if the screen is already locked
-        :rtype: bool
-        """
-
-        if self.__isLocked:
-            return False
-
-        self.__isLocked = True
-        self.__lockingObject = locker
-        return True
-
-    def unlock(self, locker):
-        """
-        Unlocks the screen.
-        The object that locked the screen needs to be passed as an argument to unlock the screen.
-        This means that every object may now manipulate the display again
-
-        :param object locker: the object that initially locked the screen
-
-        :raises Exception: Raises an exception if an object is passed to unlock the display that did not lock the screen
-
-        :return: Returns nothing
-        """
-
-        if locker is self.__lockingObject:
-            self.__isLocked = False
-            self.__lockingObject = None
-        else:
-            raise Exception("You're not permitted to unlock the display.")
-
-    def turn_off(self, caller=None):
+    def turn_off(self):
         """
         Turns the display off
 
@@ -293,14 +203,10 @@ class Display:
         :return: Returns true if the screen was successfully turned off, returns false if the screen was locked
         :rtype: bool
         """
-        if not self.can_access(caller):
-            return False
-
         self.__LCD.display_off()
         self.__LCD.backlight_off()
-        return True
 
-    def turn_on(self, caller=None):
+    def turn_on(self):
         """
         Turns the display on
 
@@ -309,8 +215,5 @@ class Display:
         :return: Returns true if the screen was successfully turned off, returns false if the screen was locked
         :rtype: bool
         """
-        if not self.can_access(caller):
-            return False
-
         self.__LCD.display_on()
         return True
