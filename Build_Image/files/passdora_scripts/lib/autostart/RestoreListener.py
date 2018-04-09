@@ -19,50 +19,50 @@ class RestoreListener(AbstractAutostart):
 
     def run(self):
         if self.is_restore_requested():
-            self.display.lock(self)
+            self.display.Lock.acquire()
 
             # TODO: Confirm backup with a button press
             print("Processing System-Restore...")
 
-            self.display.show("", "", self)
-            self.display.show_loader(2, self)
+            self.display.show("", "")
+            self.display.show_loader(2)
 
             # Extract files
             print("Extracting files...")
-            self.display.show_on_line(1, "Extracting files", self)
+            self.display.show_on_line(1, "Extracting files")
             self.extract_files()
 
             # Copy QUIQQER etc/ folder
             print("Restoring QUIQQER settings...")
-            self.display.show_on_line(1, "Restoring QUIQQER", self)
+            self.display.show_on_line(1, "Restoring QUIQQER")
             self.restore_quiqqer_config()
 
             # Copy system etc/ folder
             print("Restoring system settings...")
-            self.display.show_on_line(1, "Restoring System", self)
+            self.display.show_on_line(1, "Restoring System")
             self.restore_system_config()
 
             # Restore MySQL backup
             print("Restoring MySQL database...")
-            self.display.show_on_line(1, "Restoring Database", self)
+            self.display.show_on_line(1, "Restoring Database")
             self.restore_database()
 
             # Set is_requested in config to zero and save the file
             self.set_is_requested(0)
 
-            self.display.hide_loader(self)
+            self.display.hide_loader()
             print("Restore completed!")
-            self.display.show("Restore", "Complete!", self)
+            self.display.show("Restore", "Complete!")
 
             sleep(2)
 
             print("Restarting the system...")
-            self.display.show("Restarting", "", self)
-            self.display.show_loader(2, self)
+            self.display.show("Restarting", "")
+            self.display.show_loader(2)
 
             sleep(2)
 
-            self.display.turn_off(self)
+            self.display.turn_off()
             os.system("sudo shutdown now -r")
 
     def extract_files(self):

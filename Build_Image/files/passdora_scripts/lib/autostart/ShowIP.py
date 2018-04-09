@@ -12,7 +12,10 @@ INTERVAL = 30
 class ShowIP(AbstractAutostart):
     def run(self):
         while True:
-            self.show()
+            if not Display.Lock.locked():
+                Display.Lock.acquire()
+                self.show()
+                Display.Lock.release()
             time.sleep(INTERVAL)
 
     @staticmethod
