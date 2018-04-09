@@ -80,8 +80,38 @@ function system_setPermissions() {
 }
 
 
+# Imports the Passdora-Vendor GPG public key for www-data, pi and root user
+function system_importGpgKey() {
+    # TODO: load cert from an online source(?)
+    sudo gpg --import files/gpg.key
+    sudo -u pi gpg --import files/gpg.key
+    sudo -u www-data gpg --import files/gpg.key
+}
+
+
+function system_copyInterfaceConfig() {
+    sudo cp files/passdora.conf /etc/network/interfaces.d/
+}
+
+
+# Renames user pi to a given name
+function system_setUsername() {
+    sudo usermod -l ${1} pi
+    sudo usermod -m -d /home/${1} ${1}
+
+    # TODO: you need to be logged in as root in order to change the username
+    # See: https://www.modmypi.com/blog/how-to-change-the-default-account-username-and-password
+}
+
+
 # Executes the system setup steps in correct order
 function system_ExecuteStep() {
+    #system_Echo "Setting username..."
+    #system_setUsername admin
+
+    system_Echo "Copying interface config..."
+    system_copyInterfaceConfig
+
     system_Echo "Changing hostname..."
     system_SetHostname "passdora"
     
@@ -102,4 +132,7 @@ function system_ExecuteStep() {
     
     system_Echo "Setting user permissions..."
     system_setPermissions
+
+    system_Echo "Importing GPG key..."
+    system_importGpgKey
 }

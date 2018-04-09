@@ -9,7 +9,7 @@ from lib.display.Display import Display
 
 class RestoreListener(AbstractAutostart):
     dir_quiqqer = '/var/www/html/'
-    dir_restore = dir_quiqqer + 'media/passdora_restore_files/'
+    dir_restore = dir_quiqqer + 'var/package/sequry/passdora/restore/'
 
     config = configparser.ConfigParser()
     config_file = dir_quiqqer + 'etc/plugins/sequry/passdora.ini.php'
