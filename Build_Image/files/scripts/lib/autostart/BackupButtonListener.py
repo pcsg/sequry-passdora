@@ -96,7 +96,7 @@ class BackupButtonListener(AbstractAutostart):
 
                         display.show("Creating Backup", "")
                         display.show_loader(2)
-                        subprocess.Popen('/var/www/html/passdora_scripts/backup.sh').wait()
+                        subprocess.Popen('/var/www/html/var/package/sequry/passdora/scripts/backup.sh').wait()
                         print("Backup created!")
                         display.hide_loader()
                         display.show("Backup", "created")

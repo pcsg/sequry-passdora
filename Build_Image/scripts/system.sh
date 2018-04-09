@@ -42,7 +42,7 @@ function system_RestartWebserverComponents() {
 
 
 function system_appendAutostartCommands() {
-    sudo sed -i "s/^exit 0/sudo python3 \/var\/www\/html\/passdora_scripts\/script_loader.py\n\nexit 0/g" /etc/rc.local
+    sudo sed -i "s/^exit 0/sudo python3 \/var\/www\/html\/var\/package\/sequry\/passdora\/scripts\/script_loader.py\n\nexit 0/g" /etc/rc.local
 }
 
 
@@ -62,9 +62,9 @@ function system_setupUsbAutomount() {
 
 
 function system_createCrons() {
-#    sudo ln -s /var/www/html/passdora_scripts/backup.sh /etc/cron.daily/backup.sh
+#    sudo ln -s /var/www/html/var/package/sequry/passdora/scripts/backup.sh /etc/cron.daily/backup.sh
     # Run backup-check script every hour
-    echo "0 * * * * root sudo php /var/www/html/passdora_scripts/cron_backup.php" | sudo tee /etc/cron.d/backup > /dev/null
+    echo "0 * * * * root sudo php /var/www/html/var/package/sequry/passdora/scripts/cron_backup.php" | sudo tee /etc/cron.d/backup > /dev/null
 }
 
 

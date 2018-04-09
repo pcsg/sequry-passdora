@@ -78,9 +78,10 @@ function quiqqer_ImportInitPage() {
 }
 
 
-# Moves the passdora_scripts folder into QUIQQER directory
+# Moves the scripts folder into QUIQQER directory
 function quiqqer_CopyScripts() {
-    sudo cp -r files/passdora_scripts/ /var/www/html/
+    sudo mkdir /var/www/html/var/package/sequry/passdora/scripts/
+    sudo cp -r files/scripts/ /var/www/html/var/package/sequry/passdora/
 }
 
 
