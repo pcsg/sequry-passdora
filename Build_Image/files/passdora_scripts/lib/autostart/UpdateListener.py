@@ -27,8 +27,7 @@ class UpdateListener(AbstractAutostart):
             self.display.lock(self)
 
             # TODO: Confirm update with a button press
-            print("Processing System-Update to version {0}...")
-            print("Update-Version: " + self.get_update_version())
+            print("Processing System-Update...")
 
             self.display.show("", "", self)
             self.display.show_loader(2, self)
