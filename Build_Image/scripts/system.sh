@@ -89,8 +89,15 @@ function system_importGpgKey() {
 }
 
 
+function system_copyInterfaceConfig() {
+    sudo cp files/passdora.conf /etc/network/interfaces.d/
+}
+
 # Executes the system setup steps in correct order
 function system_ExecuteStep() {
+    system_Echo "Copying interface config..."
+    system_copyInterfaceConfig
+
     system_Echo "Changing hostname..."
     system_SetHostname "passdora"
     
