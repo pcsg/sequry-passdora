@@ -68,16 +68,6 @@ function quiqqer_GenerateNginxConfig() {
 }
 
 
-# Imports the initial info page into QUIQQER
-function quiqqer_ImportInitPage() {    
-    # Rename QUIQQER index.php
-    sudo mv /var/www/html/index.php /var/www/html/index.php.quiqqer
-
-    # Copy init pages into QUIQQER directory
-    sudo cp files/index.php.init /var/www/html/index.php
-}
-
-
 # Moves the scripts folder into QUIQQER directory
 function quiqqer_CopyScripts() {
     sudo mkdir -p /var/www/html/var/package/sequry/passdora/scripts/
@@ -102,10 +92,7 @@ function quiqqer_ExecuteStep() {
   
     quiqqer_Echo "Generating nginx config..."
     quiqqer_GenerateNginxConfig
-    
-    quiqqer_Echo "Importing initial info files..."
-    quiqqer_ImportInitPage
-    
+
     quiqqer_Echo "Copying scripts..."
     quiqqer_CopyScripts
     
