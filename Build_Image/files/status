@@ -6,6 +6,8 @@ server {
 
         server_name passdora.local;
 
+        include /var/www/html/etc/nginx/conf.d/ssl.include;
+
         location / {
                 try_files $uri $uri/ =404;
         }
