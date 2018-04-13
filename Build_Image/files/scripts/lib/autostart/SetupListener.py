@@ -28,6 +28,8 @@ class SetupListener(AbstractAutostart):
 
             self.handle_hostname()
 
+            self.handle_ssh()
+
             self.handle_dhcp()
 
             self.handle_wifi()
@@ -54,6 +56,12 @@ class SetupListener(AbstractAutostart):
         hostname = self.config.get('setup', 'hostname')
         os.system('echo "{0}" | sudo tee /etc/hostname > /dev/null'.format(hostname))
         os.system('sudo sed -i "s/127\.0\.1\.1.*passdora/127.0.1.1 {0}/g" /etc/hosts'.format(hostname))
+
+    def handle_ssh(self):
+        if self.config.get('setup', 'isSshEnabled') == '"1"':
+            os.system('sudo update-rc.d -f ssh enable')
+        else:
+            os.system('sudo update-rc.d -f ssh disable')
 
     def is_setup_requested(self):
         # Remove '"' from the value and then convert to int
