@@ -1,4 +1,4 @@
-![Passdora Logo](./Passdora_Logo.png)
+![Passdora Logo](./pictures/Passdora_Logo.png)
 
 Passdora
 ========
