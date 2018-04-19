@@ -15,6 +15,8 @@ class Button:
     # Which GPIO pin is the button connected to?
     GPIO_PIN = 18
 
+    __destroy = False
+
     def __init__(self) -> None:
         if Button.__instance is not None:
             raise Exception("Button is a Singleton, use get_instance method to get an instance!")
@@ -47,7 +49,7 @@ class Button:
 
         :return: None
         """
-        while True:
+        while not self.__destroy:
             hold_time = 0
 
             # Check if the button is currently pressed
@@ -164,3 +166,5 @@ class Button:
     def is_hold_observer_registered(self, func: Callable[[float], None]) -> bool:
         return func in self.observers_hold_functions
 
+    def __del__(self):
+        self.__destroy = True
