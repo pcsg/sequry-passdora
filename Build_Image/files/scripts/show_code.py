@@ -26,5 +26,5 @@ except IndexError:
 
 display = Display.get_instance()
 display.Lock.acquire()
-display.show("Code:", sys.argv[2])
+display.show("Code:", sys.argv[1])
 exit(0)
