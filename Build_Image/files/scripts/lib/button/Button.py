@@ -35,8 +35,6 @@ class Button:
     def get_instance() -> 'Button':
         """
         Returns an instance of this class (Singleton)
-
-        :rtype: Button
         """
         if Button.__instance is None:
             Button()
@@ -73,8 +71,8 @@ class Button:
 
     def add_release_listener(self, func: Callable[[int], None]) -> None:
         """
-        Adds an observer listening for a button release.
-        When the button is released the on_button_released() function of the observer is called.
+        Adds an EventListener-function which is called when the button is released.
+        When the button is released the given function is called.
 
         :param func: a function that is called when the event occurs
         :return: Nothing
@@ -82,28 +80,77 @@ class Button:
         self.observers_release_functions.append(func)
 
     def remove_release_listener(self, func: Callable[[int], None]) -> None:
+        """
+        Removes an EventListener-function for the button release event.
+
+        :param func: the function to remove
+        :return: Nothing
+        """
         self.observers_release_functions.remove(func)
 
-    def notify_release_observers(self, seconds) -> None:
+    def notify_release_observers(self, seconds: int) -> None:
+        """
+        Calls all functions listening for the button release event.
+        The given time after the button was released is passed to the functions as the first argument.
+
+        :param seconds: After how many seconds was the button released
+        :return: Nothing
+        """
         for func in self.observers_release_functions:
             func(seconds)
 
     def add_press_listener(self, func: Callable[[], None]) -> None:
+        """
+        Adds an EventListener-function which is called when the button is initially pressed.
+
+        :param func: a function that is called when the event occurs
+        :return: Nothing
+        """
         self.observers_press_functions.append(func)
 
     def remove_press_listener(self, func: Callable[[], None]) -> None:
+        """
+        Removes an EventListener-function for the button press event.
+
+        :param func: the function to remove
+        :return: Nothing
+        """
         self.observers_press_functions.remove(func)
 
     def notify_press_observers(self) -> None:
+        """
+        Calls all functions listening for the button press event.
+
+        :return: Nothing
+        """
         for func in self.observers_press_functions:
             func()
 
     def add_hold_listener(self, func: Callable[[int], None]) -> None:
+        """
+        Adds an EventListener-function which is called in intervals until the button is released.
+
+        :param func: a function that is called when the event occurs
+        :return: Nothing
+        """
         self.observers_hold_functions.append(func)
 
     def remove_hold_listener(self, func: Callable[[int], None]) -> None:
+        """
+        Removes an EventListener-function for the button hold event.
+
+        :param func: the function to remove
+        :return: Nothing
+        """
         self.observers_hold_functions.remove(func)
 
     def notify_hold_observers(self, seconds) -> None:
+        """
+        Calls all functions listening for the button hold event.
+        The time for how long the button is currently held is passed to the functions as the first argument.
+
+        :param seconds: The amount of seconds the button is currently held.
+        :return: Nothing
+        """
         for func in self.observers_hold_functions:
             func(seconds)
