@@ -16,26 +16,20 @@
 import RPi.GPIO as GPIO
 import sys
 import time
+
+from lib.button.Button import Button
 from lib.display.Display import Display
 
 
 # How many seconds has the button to be pressed
 BUTTON_HOLD_TIME = 3
 
-# How many seconds to sleep between while iterations?
-SLEEP_TIME = 0.1
-
 # After how many seconds should the script timeout?
 SCRIPT_TIMEOUT = 30
 
-# Which GPIO pin is the button connected to?
-BUTTON_GPIO_PIN = 18
-
-
 display = Display.get_instance()
 
-self = object()
-
+button = Button.get_instance()
 
 try:
     selected_option = sys.argv[1]
@@ -57,16 +51,13 @@ if "show_code" == sys.argv[1]:
 
 
 if "init" == sys.argv[1]:
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(BUTTON_GPIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
     scriptStartTime = time.time()
+
+    button.add_hold_listener(on_button_held)
+    button.add_press_listener(on_button_pressed)
 
     print("Press and hold the button for {0} seconds to authenticate".format(BUTTON_HOLD_TIME))
     display.show("Hold button for", "{0} seconds".format(BUTTON_HOLD_TIME))
-
-    button_was_pressed = False
-    button_held_time = 0
 
     while True:
         start_time = time.time()
@@ -109,3 +100,12 @@ if "init" == sys.argv[1]:
             sys.exit(4)
 
         time.sleep(SLEEP_TIME)
+
+def on_button_pressed():
+    pass
+
+def on_button_released():
+    pass
+
+def on_button_held():
+    pass

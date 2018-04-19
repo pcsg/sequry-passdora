@@ -99,6 +99,9 @@ class Button:
         for func in self.observers_release_functions:
             func(seconds)
 
+    def is_release_observer_registered(self, func: Callable[[float], None]) -> bool:
+        return func in self.observers_release_functions
+
     def add_press_listener(self, func: Callable[[], None]) -> None:
         """
         Adds an EventListener-function which is called when the button is initially pressed.
@@ -125,6 +128,9 @@ class Button:
         """
         for func in self.observers_press_functions:
             func()
+
+    def is_press_observer_registered(self, func: Callable[[], None]) -> bool:
+        return func in self.observers_press_functions
 
     def add_hold_listener(self, func: Callable[[float], None]) -> None:
         """
@@ -154,3 +160,7 @@ class Button:
         """
         for func in self.observers_hold_functions:
             func(seconds)
+
+    def is_hold_observer_registered(self, func: Callable[[float], None]) -> bool:
+        return func in self.observers_hold_functions
+
