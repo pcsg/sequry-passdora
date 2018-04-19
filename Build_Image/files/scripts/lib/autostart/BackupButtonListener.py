@@ -19,10 +19,13 @@ from lib.display.Display import Display
 
 class BackupButtonListener(AbstractAutostart):
     # How many seconds has the button to be pressed
-    BUTTON_HOLD_TIME = 3
+    BUTTON_HOLD_TIME_MIN = 3
+
+    # After how many seconds of button pressing the event should be ignored?
+    BUTTON_HOLD_TIME_MAX = 4
 
     # Instructions how to use this script
-    MESSAGE_INSTRUCTIONS = "Press and hold the button for {0} seconds to create a backup.".format(BUTTON_HOLD_TIME)
+    MESSAGE_INSTRUCTIONS = "Press and hold the button for {0} seconds to create a backup.".format(BUTTON_HOLD_TIME_MIN)
 
     button = Button.get_instance()
 
@@ -39,13 +42,13 @@ class BackupButtonListener(AbstractAutostart):
     def button_press_listener(self):
         self.display.Lock.acquire()
 
-        print("Button pressed. Hold for {0} seconds to create a backup...".format(self.BUTTON_HOLD_TIME))
+        print("Button pressed. Hold for {0} seconds to create a backup...".format(self.BUTTON_HOLD_TIME_MIN))
         self.display.show("Hold button for", "3 seconds")
 
-        self.display.show_countdown(2, self.BUTTON_HOLD_TIME, "{0} seconds")
+        self.display.show_countdown(2, self.BUTTON_HOLD_TIME_MIN, "{0} seconds")
 
     def button_hold_listener(self, seconds: float):
-        if seconds >= self.BUTTON_HOLD_TIME:
+        if self.BUTTON_HOLD_TIME_MAX > seconds > self.BUTTON_HOLD_TIME_MIN:
             self.display.hide_countdown()
 
             print("Release button to start backup")
@@ -55,7 +58,7 @@ class BackupButtonListener(AbstractAutostart):
         self.display.hide_countdown()
 
         # Check if button was pressed long enough
-        if seconds > self.BUTTON_HOLD_TIME:
+        if self.BUTTON_HOLD_TIME_MAX > seconds > self.BUTTON_HOLD_TIME_MIN:
             print('Creating backup... You may release the button now.')
 
             self.display.show("Creating Backup", "")
@@ -66,9 +69,6 @@ class BackupButtonListener(AbstractAutostart):
             print("Backup created!")
             self.display.hide_loader()
             self.display.show("Backup", "created")
-        else:
-            print("Button was not pressed long enough!")
-            self.display.show("Button released", "too soon")
 
         # Print that the button can be used again
         print(self.MESSAGE_INSTRUCTIONS)
