@@ -69,7 +69,7 @@ class Button:
 
             time.sleep(self.SLEEP_TIME)
 
-    def add_release_listener(self, func: Callable[[int], None]) -> None:
+    def add_release_listener(self, func: Callable[[float], None]) -> None:
         """
         Adds an EventListener-function which is called when the button is released.
         When the button is released the given function is called.
@@ -79,7 +79,7 @@ class Button:
         """
         self.observers_release_functions.append(func)
 
-    def remove_release_listener(self, func: Callable[[int], None]) -> None:
+    def remove_release_listener(self, func: Callable[[float], None]) -> None:
         """
         Removes an EventListener-function for the button release event.
 
@@ -88,7 +88,7 @@ class Button:
         """
         self.observers_release_functions.remove(func)
 
-    def notify_release_observers(self, seconds: int) -> None:
+    def notify_release_observers(self, seconds: float) -> None:
         """
         Calls all functions listening for the button release event.
         The given time after the button was released is passed to the functions as the first argument.
@@ -126,7 +126,7 @@ class Button:
         for func in self.observers_press_functions:
             func()
 
-    def add_hold_listener(self, func: Callable[[int], None]) -> None:
+    def add_hold_listener(self, func: Callable[[float], None]) -> None:
         """
         Adds an EventListener-function which is called in intervals until the button is released.
 
@@ -135,7 +135,7 @@ class Button:
         """
         self.observers_hold_functions.append(func)
 
-    def remove_hold_listener(self, func: Callable[[int], None]) -> None:
+    def remove_hold_listener(self, func: Callable[[float], None]) -> None:
         """
         Removes an EventListener-function for the button hold event.
 
@@ -144,7 +144,7 @@ class Button:
         """
         self.observers_hold_functions.remove(func)
 
-    def notify_hold_observers(self, seconds) -> None:
+    def notify_hold_observers(self, seconds: float) -> None:
         """
         Calls all functions listening for the button hold event.
         The time for how long the button is currently held is passed to the functions as the first argument.
