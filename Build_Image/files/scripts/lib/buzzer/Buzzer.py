@@ -46,15 +46,19 @@ class Buzzer:
         """
         self._PWM.stop()
 
-    def beep(self, amount=1):
+    def beep(self, times=1, length=0.05):
         """
-        Lets the buzzer beep
-        """
-        for i in range(0, amount):
-            self.on()
-            time.sleep(0.05)
+        Lets the buzzer beep for a defined length and times.
 
-            if i < amount:
+        :param length: how long the beep should last
+        :param times: how often to repeat the beep
+        :return:
+        """
+        for i in range(0, times):
+            self.on()
+            time.sleep(length)
+
+            if i < times:
                 self.off()
 
     def cleanup(self):
