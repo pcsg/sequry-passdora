@@ -16,96 +16,85 @@
 import RPi.GPIO as GPIO
 import sys
 import time
+
+from lib.button.Button import Button
 from lib.display.Display import Display
 
 
-# How many seconds has the button to be pressed
-BUTTON_HOLD_TIME = 3
+class InitSystem:
+    # How many seconds has the button to be pressed
+    BUTTON_HOLD_TIME = 3
 
-# How many seconds to sleep between while iterations?
-SLEEP_TIME = 0.1
+    # After how many seconds should the script timeout?
+    SCRIPT_TIMEOUT = 30
 
-# After how many seconds should the script timeout?
-SCRIPT_TIMEOUT = 30
+    display = Display.get_instance()
 
-# Which GPIO pin is the button connected to?
-BUTTON_GPIO_PIN = 18
+    button = Button.get_instance()
+
+    _exit = False
+
+    _exit_code = 0
+
+    def wait_for_authentication(self):
+        script_start_time = time.time()
+
+        self.button.add_press_listener(self.on_button_pressed)
+        self.button.add_release_listener(self.on_button_released)
+
+        while not self._exit:
+            if (time.time() - script_start_time) > self.SCRIPT_TIMEOUT:
+                print('No interaction')
+                self.display.show("Aborting", "no interaction")
+                self.request_exit(4)
+            time.sleep(0.5)
+
+        self.cleanup()
+
+        return self._exit_code
+
+    def cleanup(self):
+        if self.display.Lock.locked():
+            self.display.Lock.release()
+
+        if self.button.is_hold_observer_registered(self.on_button_held):
+            self.button.remove_hold_listener(self.on_button_held)
+
+        if self.button.is_press_observer_registered(self.on_button_pressed):
+            self.button.remove_press_listener(self.on_button_pressed)
+
+        if self.button.is_release_observer_registered(self.on_button_released):
+            self.button.remove_release_listener(self.on_button_released)
+
+    def request_exit(self, exitcode):
+        self.button.__del__()
+        self._exit = True
+        self._exit_code = exitcode
+
+    def on_button_pressed(self):
+        self.display.Lock.acquire()
+        self.button.add_hold_listener(self.on_button_held)
+        print("Button pressed. Hold for {0} seconds to authenticate...".format(self.BUTTON_HOLD_TIME))
+        self.display.show_countdown(2, self.BUTTON_HOLD_TIME, "{0} seconds")
+
+    def on_button_held(self, seconds: float):
+        if seconds >= self.BUTTON_HOLD_TIME:
+            print("Release button to complete authentication")
+            self.display.show("Release button to", "finish auth")
+
+    def on_button_released(self, seconds: float):
+        self.display.hide_countdown()
+
+        if seconds >= self.BUTTON_HOLD_TIME:
+            print('Authentication successful')
+            self.display.show("Authentication", "successful")
+            exitcode = 0
+        else:
+            print('Button was not pressed long enough')
+            self.display.show("Button released", "too soon")
+            exitcode = 3
+
+        self.request_exit(exitcode)
 
 
-display = Display.get_instance()
-
-self = object()
-
-
-try:
-    selected_option = sys.argv[1]
-except IndexError:
-    print("You need to specify an option. Valid options: show_code, init")
-    exit(1)
-
-
-if "show_code" == sys.argv[1]:
-    try:
-        code = sys.argv[2]
-    except IndexError:
-        print("You need to specify a code to display.")
-        exit(1)
-
-    display.Lock.acquire()
-    display.show("Code:", sys.argv[2])
-    exit(0)
-
-
-if "init" == sys.argv[1]:
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(BUTTON_GPIO_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-    scriptStartTime = time.time()
-
-    print("Press and hold the button for {0} seconds to authenticate".format(BUTTON_HOLD_TIME))
-    display.show("Hold button for", "{0} seconds".format(BUTTON_HOLD_TIME))
-
-    button_was_pressed = False
-    button_held_time = 0
-
-    while True:
-        start_time = time.time()
-
-        while not GPIO.input(BUTTON_GPIO_PIN):
-            if not button_was_pressed:
-                print("Button pressed. Hold for {0} seconds to authenticate...".format(BUTTON_HOLD_TIME))
-                display.show_countdown(2, BUTTON_HOLD_TIME, "{0} seconds")
-
-            if button_held_time >= BUTTON_HOLD_TIME:
-                display.hide_countdown()
-
-                print("Release button to complete authentication")
-                display.show("Release button to", "finish auth")
-
-                # Wait until button is released
-                while not GPIO.input(BUTTON_GPIO_PIN):
-                    pass
-                break
-
-            button_was_pressed = True
-            button_held_time = time.time() - start_time
-            time.sleep(SLEEP_TIME)
-
-        if button_was_pressed:
-            display.hide_countdown()
-
-            if button_held_time > BUTTON_HOLD_TIME:
-                print('Authentication successful')
-                display.show("Authentication", "successful")
-                sys.exit(0)
-            else:
-                print('Button was not pressed long enough')
-                display.show("Button released", "too soon")
-                sys.exit(3)
-
-        if time.time() - scriptStartTime > SCRIPT_TIMEOUT:
-            print('No interaction')
-            display.show("Aborting", "no interaction")
-            sys.exit(4)
-
-        time.sleep(SLEEP_TIME)
+sys.exit(InitSystem().wait_for_authentication())
