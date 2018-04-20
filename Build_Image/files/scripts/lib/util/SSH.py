@@ -30,7 +30,7 @@ class SSH:
         :return: Nothing
         """
         subprocess.run("sudo service ssh stop".split(" "))
-        subprocess.run("sudo pkill --signal HUP".split(" "))
+        subprocess.run("sudo pkill --signal HUP sshd".split(" "))
         subprocess.run("sudo update-rc.d -f ssh disable".split(" "))
 
     @staticmethod
