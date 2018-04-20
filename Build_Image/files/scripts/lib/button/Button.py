@@ -1,5 +1,6 @@
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 import RPi.GPIO as GPIO
 
@@ -16,6 +17,8 @@ class Button:
     GPIO_PIN = 18
 
     __destroy = False
+
+    executor = ThreadPoolExecutor()
 
     def __init__(self) -> None:
         if Button.__instance is not None:
@@ -99,7 +102,7 @@ class Button:
         :return: Nothing
         """
         for func in self.observers_release_functions:
-            func(seconds)
+            self.executor.submit(func, seconds)
 
     def is_release_observer_registered(self, func: Callable[[float], None]) -> bool:
         return func in self.observers_release_functions
@@ -129,7 +132,7 @@ class Button:
         :return: Nothing
         """
         for func in self.observers_press_functions:
-            func()
+            self.executor.submit(func)
 
     def is_press_observer_registered(self, func: Callable[[], None]) -> bool:
         return func in self.observers_press_functions
@@ -161,10 +164,11 @@ class Button:
         :return: Nothing
         """
         for func in self.observers_hold_functions:
-            func(seconds)
+            self.executor.submit(func, seconds)
 
     def is_hold_observer_registered(self, func: Callable[[float], None]) -> bool:
         return func in self.observers_hold_functions
 
     def __del__(self):
         self.__destroy = True
+        self.executor.shutdown()
