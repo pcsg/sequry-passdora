@@ -10,12 +10,12 @@ Author: Jan Wennrich (PCSG)                                                     
 """
 
 import RPi.GPIO as GPIO
-import subprocess
 
 from lib.autostart.AbstractAutostart import AbstractAutostart
 from lib.button.Button import Button
 from lib.buzzer.Buzzer import Buzzer
 from lib.display.Display import Display
+from lib.util.Backup import Backup
 
 
 class BackupButtonListener(AbstractAutostart):
@@ -74,7 +74,7 @@ class BackupButtonListener(AbstractAutostart):
             self.display.show("Creating Backup", "")
             self.display.show_loader(2)
 
-            subprocess.Popen('/var/www/html/var/package/sequry/passdora/scripts/backup.sh').wait()
+            Backup.create()
 
             print("Backup created!")
             self.display.hide_loader()
