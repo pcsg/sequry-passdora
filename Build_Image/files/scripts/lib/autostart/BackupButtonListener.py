@@ -80,6 +80,9 @@ class BackupButtonListener(AbstractAutostart):
             self.display.hide_loader()
             self.display.show("Backup", "created")
 
+        self.button.remove_hold_listener(self.button_hold_listener)
+        self.button.remove_release_listener(self.button_release_listener)
+
         # Print that the button can be used again
         print(self.MESSAGE_INSTRUCTIONS)
 
