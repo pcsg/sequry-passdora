@@ -39,12 +39,12 @@ class BackupButtonListener(AbstractAutostart):
     has_locked_display = False
 
     def run(self):
-        self.button.add_release_listener(self.button_release_listener)
         self.button.add_press_listener(self.button_press_listener)
-        self.button.add_hold_listener(self.button_hold_listener)
 
     def button_press_listener(self):
         self.has_beeped = False
+
+        self.button.add_hold_listener(self.button_hold_listener)
 
         if not self.display.Lock.locked():
             self.display.Lock.acquire()
@@ -57,10 +57,16 @@ class BackupButtonListener(AbstractAutostart):
         if self.BUTTON_HOLD_TIME_MAX > seconds > self.BUTTON_HOLD_TIME_MIN and not self.has_beeped:
             self.has_beeped = True
 
+            self.button.add_release_listener(self.button_release_listener)
+
             self.buzzer.beep()
 
             print("Release button to start backup")
             self.display.show("Release button to", "start backup")
+
+        if seconds > self.BUTTON_HOLD_TIME_MAX:
+            self.button.remove_hold_listener(self.button_hold_listener)
+            self.button.remove_release_listener(self.button_release_listener)
 
     def button_release_listener(self, seconds: float):
         # Check if button was pressed long enough
