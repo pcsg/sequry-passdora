@@ -1,10 +1,11 @@
 import threading
 import time
-from concurrent.futures import ThreadPoolExecutor
 
 import RPi.GPIO as GPIO
 
 from typing import List, Callable
+
+from lib.util.ThreadPoolExecutor import ThreadPoolExecutor
 
 
 class Button:
@@ -18,7 +19,7 @@ class Button:
 
     __destroy = False
 
-    executor = ThreadPoolExecutor()
+    executor = ThreadPoolExecutor.get_instance()
 
     def __init__(self) -> None:
         if Button.__instance is not None:
