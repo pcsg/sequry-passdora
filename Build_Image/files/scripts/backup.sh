@@ -13,10 +13,10 @@
 #######################################################################
 
 # Current date in format YYYY_MM_DD
-DATE=$(date '+%F')
+DATE=$(date '+%Y-%m-%d_%H-%M-%S')
 
 # Folder where all backups are stored
-GENERAL_BACKUP_FOLDER=/home/pi/backups
+GENERAL_BACKUP_FOLDER=/var/www/html/var/package/sequry/passdora/backups/
 
 # Folder where files are temporarily copied to
 TEMP_BACKUP_FOLDER=${GENERAL_BACKUP_FOLDER}/${DATE}
