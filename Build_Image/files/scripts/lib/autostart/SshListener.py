@@ -16,6 +16,7 @@ from lib.button.Button import Button
 from lib.buzzer.Buzzer import Buzzer
 from lib.display.Display import Display
 from lib.util.SSH import SSH
+from lib.util.System import System
 
 
 class SshListener(AbstractAutostart):
@@ -42,6 +43,9 @@ class SshListener(AbstractAutostart):
         self.button.add_press_listener(self.button_press_listener)
 
     def button_press_listener(self):
+        if not System.is_activated():
+            return
+
         self.has_beeped = False
         self.has_locked_display = False
         self.button.add_hold_listener(self.button_hold_listener)
