@@ -66,8 +66,9 @@ class InitSystem:
         if self.button.is_release_observer_registered(self.on_button_released):
             self.button.remove_release_listener(self.on_button_released)
 
-    def request_exit(self, exitcode):
         self.button.__del__()
+
+    def request_exit(self, exitcode):
         self._exit = True
         self._exit_code = exitcode
 
