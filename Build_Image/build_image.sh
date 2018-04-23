@@ -37,8 +37,7 @@ quiqqer_ExecuteStep
 nginx_ExecuteStep
 system_ExecuteStep
 
-echo -e "\033[0;32mSetup completed! Rebooting now...\033[0m"
-echo -e "\033[0;32mConnect to SSH now via: pi@passdora.local PW: raspberry \033[0m"
-system_Reboot
+echo -e "\033[0;32mSetup completed! Shutting down...\033[0m"
+system_Shutdown
 
 exit 0

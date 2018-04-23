@@ -21,6 +21,12 @@ function system_Reboot() {
 }
 
 
+# Shuts the system down
+function system_Shutdown() {
+    sudo shutdown now
+}
+
+
 # Changes the hostname to passdora
 function system_SetHostname() {
     echo "passdora" | sudo tee /etc/hostname > /dev/null
