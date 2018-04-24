@@ -5,6 +5,7 @@ from time import sleep
 
 from lib.autostart.AbstractAutostart import *
 from lib.display.Display import Display
+from lib.util.Backup import Backup
 
 
 class UpdateListener(AbstractAutostart):
@@ -43,6 +44,9 @@ class UpdateListener(AbstractAutostart):
             print("Running update-script...")
             self.display.show_on_line(1, "Executing scripts")
             self.run_update_script()
+
+            print("Creating backup...")
+            Backup.create()
 
             # Set is_requested in config to zero and save the file
             self.set_is_requested(0)

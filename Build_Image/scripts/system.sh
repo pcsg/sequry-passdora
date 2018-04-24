@@ -21,6 +21,12 @@ function system_Reboot() {
 }
 
 
+# Shuts the system down
+function system_Shutdown() {
+    sudo shutdown now
+}
+
+
 # Changes the hostname to passdora
 function system_SetHostname() {
     echo "passdora" | sudo tee /etc/hostname > /dev/null
@@ -43,6 +49,8 @@ function system_RestartWebserverComponents() {
 
 function system_appendAutostartCommands() {
     sudo sed -i "s/^exit 0/sudo python3 \/var\/www\/html\/var\/package\/sequry\/passdora\/scripts\/script_loader.py\n\nexit 0/g" /etc/rc.local
+
+    echo "@reboot root cd /home/pi/Initialize_System/ && sudo ./init_system.sh 2> /var/log/init_system.log" | sudo tee /etc/cron.d/initsystem > /dev/null
 }
 
 
@@ -53,11 +61,28 @@ function system_setupUsbAutomount() {
     sudo cp files/usb_automount/usbstick.rules /etc/udev/rules.d/usbstick.rules
 
     # Systemd service
-    sudo cp files/usb_automount/usbstick-handler@.service /lib/systemd/usbstick-handler@.service
+    sudo cp files/usb_automount/usbstick-handler@.service /lib/systemd/system/usbstick-handler@.service
 
     # Mount script
     sudo cp files/usb_automount/automount /usr/local/bin/automount
     sudo chmod +x /usr/local/bin/automount
+}
+
+
+function system_setupFstab() {
+    echo "/dev/disk/by-path/platform-3f980000.usb-usb-0:1.4:1.0-scsi-0:0:0:0-part1 /media/system auto defaults 0 0" | sudo tee --append /etc/fstab > /dev/null
+    sudo mount -a
+}
+
+
+function system_setupUsbLogs() {
+    sudo service rsyslog stop
+
+    mkdir -p /media/system/var/log/
+    sudo rsync -a /var/log/ /media/system/var/
+    sudo ln -s /media/system/var/log/ /var/log
+
+    sudo service rsyslog start
 }
 
 
@@ -123,6 +148,12 @@ function system_ExecuteStep() {
 
     system_Echo "Setting up USB auto-mount..."
     system_setupUsbAutomount
+
+    system_Echo "Setting up fstab..."
+    system_setupFstab
+
+    system_Echo "Setting up logging to usb..."
+    system_setupUsbLogs
 
     system_Echo "Creating Crons..."
     system_createCrons
