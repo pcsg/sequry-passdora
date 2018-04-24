@@ -71,7 +71,20 @@ function system_setupUsbAutomount() {
 
 function system_setupFstab() {
     echo "/dev/disk/by-path/platform-3f980000.usb-usb-0:1.4:1.0-scsi-0:0:0:0-part1 /media/system auto defaults 0 0" | sudo tee --append /etc/fstab > /dev/null
+    sudo mount -a
 }
+
+
+function system_setupUsbLogs() {
+    sudo service rsyslog stop
+
+    mkdir -p /media/system/var/log/
+    sudo rsync -a /var/log/ /media/system/var/
+    sudo ln -s /media/system/var/log/ /var/log
+
+    sudo service rsyslog start
+}
+
 
 function system_createCrons() {
 #    sudo ln -s /var/www/html/var/package/sequry/passdora/scripts/backup.sh /etc/cron.daily/backup.sh
@@ -138,6 +151,9 @@ function system_ExecuteStep() {
 
     system_Echo "Setting up fstab..."
     system_setupFstab
+
+    system_Echo "Setting up logging to usb..."
+    system_setupUsbLogs
 
     system_Echo "Creating Crons..."
     system_createCrons
