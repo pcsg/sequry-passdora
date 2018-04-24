@@ -25,7 +25,7 @@ TEMP_BACKUP_FOLDER=${GENERAL_BACKUP_FOLDER}/${DATE}
 ENCRYPTED_BACKUP_FILE=${GENERAL_BACKUP_FOLDER}/${DATE}.tgz.gpg
 
 # Location where usb-drives will be mounted to
-USB_MOUNTING_POINT=/media/usb
+USB_MOUNTING_POINT=/media/usb_drive/
 
 
 # Parse restore-key .ini-file and assign variable containg the key
@@ -71,12 +71,12 @@ if mountpoint -q ${USB_MOUNTING_POINT}; then
     echo "Copying backup to USB-drive..."
 
     # Create the backup folder
-    if [ ! -d  ${USB_MOUNTING_POINT}/passdora-backups/ ]; then
-        sudo mkdir ${USB_MOUNTING_POINT}/passdora-backups/
+    if [ ! -d  ${USB_MOUNTING_POINT}passdora-backups/ ]; then
+        sudo mkdir ${USB_MOUNTING_POINT}passdora-backups/
     fi
 
     # Copy the backup
-    sudo cp ${ENCRYPTED_BACKUP_FILE} ${USB_MOUNTING_POINT}/passdora-backups/
+    sudo cp ${ENCRYPTED_BACKUP_FILE} ${USB_MOUNTING_POINT}passdora-backups/
 
     echo "Backup successfully copied to USB-drive"
 fi
