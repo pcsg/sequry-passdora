@@ -69,6 +69,10 @@ function system_setupUsbAutomount() {
 }
 
 
+function system_setupFstab() {
+    echo "/dev/disk/by-path/platform-3f980000.usb-usb-0:1.4:1.0-scsi-0:0:0:0-part1 /media/system auto defaults 0 0" | sudo tee --append /etc/fstab > /dev/null
+}
+
 function system_createCrons() {
 #    sudo ln -s /var/www/html/var/package/sequry/passdora/scripts/backup.sh /etc/cron.daily/backup.sh
     # Run backup-check script every hour
@@ -131,6 +135,9 @@ function system_ExecuteStep() {
 
     system_Echo "Setting up USB auto-mount..."
     system_setupUsbAutomount
+
+    system_Echo "Setting up fstab..."
+    system_setupFstab
 
     system_Echo "Creating Crons..."
     system_createCrons
