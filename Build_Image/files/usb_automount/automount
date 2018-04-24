@@ -1,9 +1,4 @@
 #!/bin/bash
 
-# Has to be moved to /usr/local/bin/automount/
-
-if [ mountpoint -q /media/system ]; then
-   /usr/bin/pmount --umask 000 --noatime -w --sync $1 usb
-else
-   /usr/bin/pmount --umask 000 --noatime -w --sync $1 system
-fi
+# This file has to be moved to /usr/local/bin/automount/
+/usr/bin/pmount --umask 000 --noatime -w --sync $1 usb_drive
