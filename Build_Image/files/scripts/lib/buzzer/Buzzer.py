@@ -23,6 +23,9 @@ class Buzzer:
         GPIO.setup(self.GPIO_PIN, GPIO.OUT)
         self._PWM = GPIO.PWM(self.GPIO_PIN, 1000)
 
+        # Fix: turn GPIO-port to IN, to prevent the buzzer from heating up
+        GPIO.setup(self.GPIO_PIN, GPIO.IN)
+
         Buzzer.__instance = self
 
     @staticmethod
@@ -38,6 +41,7 @@ class Buzzer:
         """
         Turns the buzzer on
         """
+        GPIO.setup(self.GPIO_PIN, GPIO.OUT)
         self._PWM.start(10)
 
     def off(self):
@@ -45,6 +49,9 @@ class Buzzer:
         Turns the buzzer off
         """
         self._PWM.stop()
+
+        # Fix: turn GPIO-port to IN, to prevent the buzzer from heating up
+        GPIO.setup(self.GPIO_PIN, GPIO.IN)
 
     def beep(self, times=1, length=0.05):
         """
