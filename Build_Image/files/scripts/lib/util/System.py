@@ -1,4 +1,5 @@
 import configparser
+import os
 
 
 class System:
@@ -11,3 +12,7 @@ class System:
         config.read(config_file)
 
         return config.get('general', 'is_activated') == '"1"'
+
+    @staticmethod
+    def reboot():
+        return os.system("sudo reboot")
