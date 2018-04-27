@@ -149,11 +149,22 @@ function system_ExecuteStep() {
     system_Echo "Setting up USB auto-mount..."
     system_setupUsbAutomount
 
-    system_Echo "Setting up fstab..."
-    system_setupFstab
+    # Ask if logging to USB should be enabled
+    read -p "Should the system log to a USB-drive? (y/n): " CHOICE
+    case ${CHOICE} in
+        y|Y)
+            echo "System will log to USB..."
 
-    system_Echo "Setting up logging to usb..."
-    system_setupUsbLogs
+            system_Echo "Setting up fstab..."
+            system_setupFstab
+
+            system_Echo "Setting up logging to usb..."
+            system_setupUsbLogs
+            ;;
+        n|N|*)
+            echo "System will NOT log to USB"
+            ;;
+    esac
 
     system_Echo "Creating Crons..."
     system_createCrons
