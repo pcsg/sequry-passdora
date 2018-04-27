@@ -8,7 +8,7 @@ class Buzzer:
     __instance = None  # type: Buzzer
 
     # Which GPIO pin is the button connected to?
-    GPIO_PIN = 5
+    GPIO_PIN = 14
 
     _PWM = None
 

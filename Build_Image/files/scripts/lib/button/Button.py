@@ -15,7 +15,7 @@ class Button:
     SLEEP_TIME = 0.1
 
     # Which GPIO pin is the button connected to?
-    GPIO_PIN = 18
+    GPIO_PIN = 15
 
     __destroy = False
 
