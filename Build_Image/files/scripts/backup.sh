@@ -58,6 +58,8 @@ sudo cp -a /etc/* ${TEMP_BACKUP_FOLDER}/system_etc
     cd ${TEMP_BACKUP_FOLDER}
     echo "Packing everything into an encrypted archive..."
     sudo tar -czp * | gpg -c --batch --yes --passphrase ${RESTORE_KEY} -o ${ENCRYPTED_BACKUP_FILE}
+    sudo chown www-data:www-data ${ENCRYPTED_BACKUP_FILE}
+    sudo chown www-data:www-data ${GENERAL_BACKUP_FOLDER}
 )
 
 # Remove temp folder

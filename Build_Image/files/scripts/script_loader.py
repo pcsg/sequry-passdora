@@ -5,6 +5,7 @@ from lib.autostart.RestoreListener import *
 from lib.autostart.SshListener import SshListener
 from lib.autostart.UpdateListener import *
 from lib.autostart.SetupListener import *
+from lib.autostart.RebootListener import *
 
 autostarts = [
     ShowIP(),
@@ -13,7 +14,8 @@ autostarts = [
     RestoreListener(),
     UpdateListener(),
     SetupListener(),
-    SshListener()
+    SshListener(),
+    RebootListener()
 ]
 
 for Autostart in autostarts:
