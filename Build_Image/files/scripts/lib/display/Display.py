@@ -26,7 +26,6 @@ class Display:
         cols=20, rows=4,
         dotsize=8,
         charmap='A02',
-        auto_linebreaks=False,
         backlight_enabled=True
     )  # type: CharLCD
 
@@ -85,13 +84,10 @@ class Display:
         :return: Returns true if the text was displayed, returns false if the display was locked
         :rtype: bool
         """
-        # Only allowed to print to line 1 and 2
-        if (line is not 1) and (line is not 2):
-            raise Exception("Can't write to line " + str(line))
-
         # Place "|" on left and right border, center text in between
         self.__LCD.cursor_pos = (line, 0)
-        self.__LCD.write_string("|{0}|".format(text.center(18)))
+        text = "|{0}|".format(text.center(18))
+        self.__LCD.write_string(text)
 
     def show_default(self):
         """
@@ -142,7 +138,7 @@ class Display:
                 loader_text = " " * i + "." + " " * (3 - i)
 
                 self.show_on_line(line, loader_text)
-                time.sleep(0.1)
+                time.sleep(0.2)
 
     def hide_loader(self):
         """
