@@ -23,13 +23,19 @@ class ShowIP(AbstractAutostart):
         hostname = socket.gethostname()
         ip = get_lan_ip()
 
-        hostname_string = "Host:"
-        if len(hostname) < 15:
+        hostname_string = ""
+        if len(hostname) <= 11:
+            hostname_string += "Host:"
+
+        if len(hostname) <= 10:
             hostname_string += " "
         hostname_string += hostname
 
-        ip_string = "IP:"
-        if len(ip) < 15:
+        ip_string = ""
+        if len(ip) <= 15:
+            ip_string += "IP:"
+
+        if len(ip) <= 14:
             ip_string += " "
         ip_string += ip
 

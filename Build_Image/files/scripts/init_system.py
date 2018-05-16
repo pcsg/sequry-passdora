@@ -80,6 +80,7 @@ class InitSystem:
 
     def on_button_held(self, seconds: float):
         if seconds >= self.BUTTON_HOLD_TIME:
+            self.button.remove_hold_listener(self.on_button_held)
             print("Release button to complete authentication")
             self.display.show("Release button to", "finish auth")
 

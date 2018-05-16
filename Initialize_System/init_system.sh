@@ -26,7 +26,7 @@ if ! isInitialized; then
     coloredEcho "Initializing Passdora..."
 
     # If connected to the internet...
-    if ping -q -c 1 -W 1 google.com >/dev/null; then
+    if ping -q -c 1 -W 1 google.com > /dev/null; then
         coloredEcho "Updating packages..."
         sudo apt update -y
         sudo apt upgrade -y

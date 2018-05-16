@@ -9,9 +9,8 @@
 """
 import threading
 import time
-from threading import Lock
 
-from lib.display.lcddriver import lcd
+from lib.display.RPLCD.i2c import CharLCD
 
 
 class Display:
@@ -20,7 +19,15 @@ class Display:
     __isLocked = False  # type: bool
     __lockingObject = None  # type: object
 
-    __LCD = lcd()  # type: lcd
+    __LCD = CharLCD(
+        i2c_expander='PCF8574',
+        address=0x27,
+        port=1,
+        cols=20, rows=4,
+        dotsize=8,
+        charmap='A02',
+        backlight_enabled=True
+    )  # type: CharLCD
 
     __isLoaderShowing = False  # type: bool
     __isCountdownShowing = False  # type: bool
@@ -54,10 +61,16 @@ class Display:
         :return: Returns true if the text was displayed, returns false if the display was locked
         :rtype: bool
         """
-        self.__LCD.display_string("--==| PASSDORA |==--", 0)
-        self.show_on_line(1, line1)
-        self.show_on_line(2, line2)
-        self.__LCD.display_string("--------------------", 3)
+        line1 = line1.center(18)
+        line2 = line2.center(18)
+
+        text = "--==| PASSDORA |==--\r\n" + \
+               "|" + line1 + "|\r\n" + \
+               "|" + line2 + "|\r\n" + \
+               "--------------------"
+
+        self.__LCD.home()
+        self.__LCD.write_string(text)
 
     def show_on_line(self, line, text):
         """
@@ -71,12 +84,10 @@ class Display:
         :return: Returns true if the text was displayed, returns false if the display was locked
         :rtype: bool
         """
-        # Only allowed to print to line 1 and 2
-        if (line is not 1) and (line is not 2):
-            raise Exception("Can't write to line " + str(line))
-
         # Place "|" on left and right border, center text in between
-        self.__LCD.display_string("|{0}|".format(text.center(18)), line)
+        self.__LCD.cursor_pos = (line, 0)
+        text = "|{0}|".format(text.center(18))
+        self.__LCD.write_string(text)
 
     def show_default(self):
         """
@@ -127,7 +138,7 @@ class Display:
                 loader_text = " " * i + "." + " " * (3 - i)
 
                 self.show_on_line(line, loader_text)
-                time.sleep(0.1)
+                time.sleep(0.2)
 
     def hide_loader(self):
         """
@@ -203,8 +214,8 @@ class Display:
         :return: Returns true if the screen was successfully turned off, returns false if the screen was locked
         :rtype: bool
         """
-        self.__LCD.display_off()
-        self.__LCD.backlight_off()
+        self.__LCD.backlight_enabled = False
+        self.__LCD.display_enabled = False
 
     def turn_on(self):
         """
@@ -215,5 +226,6 @@ class Display:
         :return: Returns true if the screen was successfully turned off, returns false if the screen was locked
         :rtype: bool
         """
-        self.__LCD.display_on()
+        self.__LCD.backlight_enabled = True
+        self.__LCD.display_enabled = True
         return True
