@@ -8,6 +8,7 @@ Author: Jan Wennrich (PCSG)                                                 #
                                                                             #
 #############################################################################
 """
+from time import sleep
 
 import RPi.GPIO as GPIO
 
@@ -89,6 +90,8 @@ class SshListener(AbstractAutostart):
             else:
                 print("SSH is disabled now.")
                 self.display.show("SSH", "disabled")
+
+            sleep(2)
 
             if self.has_locked_display:
                 self.display.Lock.release()

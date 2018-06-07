@@ -8,6 +8,7 @@ Author: Jan Wennrich (PCSG)                                                     
                                                                                                         #
 #########################################################################################################
 """
+from time import sleep
 
 import RPi.GPIO as GPIO
 
@@ -83,6 +84,8 @@ class BackupButtonListener(AbstractAutostart):
             print("Backup created!")
             self.display.hide_loader()
             self.display.show("Backup", "created")
+
+            sleep(2)
 
         self.button.remove_hold_listener(self.button_hold_listener)
         self.button.remove_release_listener(self.button_release_listener)

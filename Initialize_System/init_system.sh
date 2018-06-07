@@ -26,12 +26,17 @@ if ! isInitialized; then
     coloredEcho "Initializing Passdora..."
 
     # If connected to the internet...
-    if ping -q -c 1 -W 1 google.com > /dev/null; then
-        coloredEcho "Updating packages..."
-        sudo apt update -y
-        sudo apt upgrade -y
-    fi
+#    if ping -q -c 1 -W 1 google.com > /dev/null; then
+#        coloredEcho "Updating packages..."
+#        sudo apt update -y
+#        sudo apt upgrade -y
+#    fi
 
+    # Wait for MySQL
+    while [ $(service mysql status | grep "active (running)" | wc -l) -ne 1 ]; do
+       echo "Waiting for MySQL..."
+       sleep 1
+    done
 
     initPasswordFile
 

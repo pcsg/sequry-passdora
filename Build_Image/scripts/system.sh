@@ -50,7 +50,7 @@ function system_RestartWebserverComponents() {
 function system_appendAutostartCommands() {
     sudo sed -i "s/^exit 0/sudo python3 \/var\/www\/html\/var\/package\/sequry\/passdora\/scripts\/script_loader.py\n\nexit 0/g" /etc/rc.local
 
-    echo "@reboot root cd /home/pi/Initialize_System/ && sudo ./init_system.sh 2> /var/log/init_system.log" | sudo tee /etc/cron.d/initsystem > /dev/null
+    echo "@reboot root cd /home/pi/Initialize_System/ && sudo ./init_system.sh >> /var/log/init_system.log 2>&1" | sudo tee /etc/cron.d/initsystem > /dev/null
 }
 
 
