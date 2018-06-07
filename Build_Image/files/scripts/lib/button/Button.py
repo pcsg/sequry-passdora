@@ -14,6 +14,9 @@ class Button:
     # How many seconds to sleep between while iterations?
     SLEEP_TIME = 0.1
 
+    # How many seconds to sleep after the button is released (time until button can be pressed again)?
+    SLEEP_BUTTON_RELEASE = 1
+
     # Which GPIO pin is the button connected to?
     GPIO_PIN = 15
 
@@ -72,6 +75,7 @@ class Button:
 
                 # If the button was released...
                 self.notify_release_observers(hold_time)
+                time.sleep(self.SLEEP_BUTTON_RELEASE)
 
             time.sleep(self.SLEEP_TIME)
 
